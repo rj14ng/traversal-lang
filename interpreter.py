@@ -34,6 +34,9 @@ class Interpreter(object):
         self.current_token = None
         self.current_char = self.text[self.pos]
     
+    ###############################################################################
+    # Lexer code                                                                  #
+    ###############################################################################
     def error(self):
         raise Exception("Error parsing input")  # might come back one day to make this error message more user friendly
     
@@ -93,6 +96,9 @@ class Interpreter(object):
         
         return Token(EOF, None)
     
+    ###############################################################################
+    # Parser code                                                                 #
+    ###############################################################################
     def eat(self, token_type):
         # Compare the current token type with the passed token type
         # If they match, 'eat' the current token then assign the next token to self.current_token
@@ -102,6 +108,14 @@ class Interpreter(object):
             self.current_token = self.get_next_token()
         else:
             self.error()
+    
+    def term(self):
+        '''
+        Return an INTEGER token value.
+        '''
+        token = self.current_token
+        self.eat(INTEGER)
+        return token.value
     
     def expr(self):
         '''
@@ -113,28 +127,16 @@ class Interpreter(object):
         # Set current token to the first token taken from the input
         self.current_token = self.get_next_token()
 
-        # Expect the current token to be an integer
-        left = self.current_token
-        self.eat(INTEGER)
-
-        # Expect the current token to either a '+' or '-' symbol
-        op = self.current_token
-        if op.type == PLUS:
-            self.eat(PLUS)
-        else:
-            self.eat(MINUS)
-
-        # Expect the current token to be an integer
-        right = self.current_token
-        self.eat(INTEGER)
-        # After above call self.current is set to EOF token
-
-        # At this point INTEGER PLUS/MINUS INTEGER sequence of tokens has been successfully found
-        # Method can just return result of adding/subtracting the two integers
-        if op.type == PLUS:
-            result = left.value + right.value
-        else:
-            result = left.value - right.value
+        result = self.term()
+        while self.current_token.type in (PLUS, MINUS):
+            token = self.current_token
+            if token.type == PLUS:
+                self.eat(PLUS)
+                result += self.term()
+            elif token.type == MINUS:
+                self.eat(MINUS)
+                result -= self.term()
+        
         return result
 
 def main():
