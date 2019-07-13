@@ -4,14 +4,16 @@ ADD     = 'ADD'
 SUB     = 'SUB'
 MUL     = 'MUL'
 DIV     = 'DIV'
+LPAREN  = '('
+RPAREN  = ')'
 EOF     = 'EOF'  # end-of-file, no more input left for lexical analysis
 
 
 class Token(object):
     def __init__(self, type, value):
-        # Token type: INTEGER, ADD, SUB, MUL, DIV, or EOF
+        # Token type
         self.type = type
-        # Token value: non-negative integer, '+', '-', '*', '/' or None
+        # Token value
         self.value = value
     
     def __str__(self):
@@ -31,7 +33,7 @@ class Token(object):
 
 class Lexer(object):
     def __init__(self, text):
-        # String input, e.g. "3 * 5" or "12 / 3 * 4"
+        # String input, e.g. "4 + 2 * 3 - 6 / 2"
         self.text = text
         # self.pos is an index into self.text
         self.pos = 0
@@ -102,6 +104,16 @@ class Lexer(object):
                 self.advance()
                 return Token(DIV, '/')
             
+            # Return LPAREN token
+            if self.current_char == '(':
+                self.advance()
+                return Token(LPAREN, '(')
+            
+            # Return RPAREN token
+            if self.current_char == ')':
+                self.advance()
+                return Token(RPAREN, ')')
+            
             # Raise an exception if character is anything else
             self.error
         
@@ -129,11 +141,17 @@ class Parser(object):
     
     def factor(self):
         '''
-        factor : INTEGER
+        factor : INTEGER | LPAREN expr RPAREN
         '''
         token = self.current_token
-        self.eat(INTEGER)
-        return token.value
+        if token.type == INTEGER:
+            self.eat(INTEGER)
+            return token.value
+        elif token.type == LPAREN:
+            self.eat(LPAREN)
+            result = self.expr()  # Recursively use expr() method within parentheses
+            self.eat(RPAREN)
+            return result
     
     def term(self):
         '''
@@ -159,7 +177,7 @@ class Parser(object):
         Grammar:
         expr   : term ((ADD | SUB) term)*
         term   : factor ((MUL | DIV) factor)*
-        factor : INTEGER
+        factor : INTEGER | LPAREN expr RPAREN
         '''
 
         result = self.term()
