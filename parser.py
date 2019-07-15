@@ -9,12 +9,21 @@ class AST(object):
 
 class BinOp(AST):
     '''
-    Binary operators.
+    Binary operators (operating on two operands).
     '''
     def __init__(self, left, op, right):
         self.left = left
         self.token = self.op = op
         self.right = right
+
+
+class UnaryOp(AST):
+    '''
+    Unary operators (operating on one operand only).
+    '''
+    def __init__(self, op, expr):
+        self.token = self.op = op
+        self.expr = expr
 
 
 class Num(AST):
@@ -47,10 +56,18 @@ class Parser(object):
     
     def factor(self):
         '''
-        factor : INTEGER | LPAREN expr RPAREN
+        factor : (ADD | SUB) factor INTEGER | LPAREN expr RPAREN
         '''
         token = self.current_token
-        if token.type == INTEGER:
+        if token.type == ADD:
+            self.eat(ADD)
+            node = UnaryOp(token, self.factor())
+            return node
+        elif token.type == SUB:
+            self.eat(SUB)
+            node = UnaryOp(token, self.factor())
+            return node
+        elif token.type == INTEGER:
             self.eat(INTEGER)
             return Num(token)
         elif token.type == LPAREN:

@@ -31,11 +31,19 @@ class Interpreter(NodeVisitor):
         elif node.op.type == DIV:
             return self.visit(node.left) / self.visit(node.right)
     
+    def visit_UnaryOp(self, node):
+        if node.op.type == ADD:
+            return +self.visit(node.expr)
+        elif node.op.type == SUB:
+            return -self.visit(node.expr)
+    
     def visit_Num(self, node):
         return node.value
     
     def interpret(self):
         tree = self.parser.parse()
+        if tree is None:
+            return ''
         return self.visit(tree)
 
 
@@ -47,6 +55,7 @@ def main():
             break
         if not text:
             continue
+        
         lexer = Lexer(text)
         parser = Parser(lexer)
         interpreter = Interpreter(parser)

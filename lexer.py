@@ -41,7 +41,7 @@ class Lexer(object):
         self.current_char = self.text[self.pos]
     
     def error(self):
-        raise Exception("Error parsing input")  # might come back one day to make this error message more user friendly
+        raise Exception("Invalid character")  # might come back one day to make this error message more user friendly
 
     def advance(self):
         '''
@@ -115,6 +115,6 @@ class Lexer(object):
                 return Token(RPAREN, ')')
             
             # Raise an exception if character is anything else
-            self.error
+            self.error()
         
         return Token(EOF, None)
