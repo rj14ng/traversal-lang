@@ -1,9 +1,17 @@
-class Number():
+class Integer():
     def __init__(self, value):
         self.value = value
     
     def eval(self):
-        return int(self.value)
+        return self.value
+
+
+class Float():
+    def __init__(self, value):
+        self.value = value
+    
+    def eval(self):
+        return self.value
 
 
 class BinaryOp():
