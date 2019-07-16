@@ -1,5 +1,5 @@
 # EPQ
-Repository for Rocco Jiang's Extended Project Qualification
+Repository for Rocco Jiang's Extended Project Qualification.
 
 ## Requirements
 The parser requires RPly.

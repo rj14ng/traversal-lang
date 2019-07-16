@@ -15,6 +15,9 @@ class Lexer():
         # Numbers
         self.lexer.add('FLOAT', r'\d+\.\d+')  # Check for float before integer!
         self.lexer.add('INTEGER', r'\d+')
+        # Parentheses
+        self.lexer.add('LPAREN', r'\(')
+        self.lexer.add('RPAREN', r'\)')
         # Ignore all whitespace characters
         self.lexer.ignore(r'\s+')
     

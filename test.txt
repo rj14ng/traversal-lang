@@ -2,3 +2,5 @@ output 17 + 3 * 8 / 6
 output 38 / 9 * 27 + 3
 output 3.142 * 2
 output 2.718 / 2
+output 3 + 1 / 2
+output (3 + 1) / 2

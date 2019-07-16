@@ -5,8 +5,8 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['OUTPUT', 'ADD', 'SUB', 'MUL', 'DIV', 'INTEGER', 'FLOAT'], 
-            # A list of precedence rules
+            ['OUTPUT', 'ADD', 'SUB', 'MUL', 'DIV', 'FLOAT', 'INTEGER', 'LPAREN', 'RPAREN'], 
+            # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['ADD', 'SUB']),
                 ('left', ['MUL', 'DIV'])
@@ -17,6 +17,10 @@ class Parser():
         @self.pg.production("statement : OUTPUT expression")
         def statement_output(p):
             return Output(p[1])
+        
+        @self.pg.production("expression : LPAREN expression RPAREN")
+        def expr_paren(p):
+            return p[1]
         
         @self.pg.production("expression : expression ADD expression")
         @self.pg.production("expression : expression SUB expression")
@@ -34,6 +38,8 @@ class Parser():
                 return Mul(left, right)
             elif operator.gettokentype() == 'DIV':
                 return Div(left, right)
+            else:
+                raise AssertionError("This should not be possible!")
         
         @self.pg.production("expression : INTEGER")
         def expr_int(p):
@@ -45,10 +51,6 @@ class Parser():
         
         @self.pg.error
         def error_handle(token):
-            # Error message for those pesky '$end' tokens
-            # Is this needed anymore now that NEWLINE tokens don't exist anymore?
-            if token.gettokentype() == "$end":
-                raise ValueError("Ran into a $end token where it wasn't expected. Maybe you missed a newline somewhere?")
             # Generic error message
             raise ValueError(f"Ran into a {token.gettokentype()} token where it wasn't expected.")
     
