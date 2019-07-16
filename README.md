@@ -2,7 +2,7 @@
 Repository for Rocco Jiang's Extended Project Qualification
 
 ## Requirements
-The parser requires RPLY.
+The parser requires RPly.
 
 Install using `pip3 install rply`.
 
