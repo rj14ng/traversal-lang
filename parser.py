@@ -1,123 +1,47 @@
-from lexer import *
+from rply import ParserGenerator
+from ast import Number, Add, Sub, Mul, Div, Output
 
-class AST(object):
-    '''
-    Abstract syntax tree.
-    '''
-    pass
-
-
-class BinOp(AST):
-    '''
-    Binary operators (operating on two operands).
-    '''
-    def __init__(self, left, op, right):
-        self.left = left
-        self.token = self.op = op
-        self.right = right
-
-
-class UnaryOp(AST):
-    '''
-    Unary operators (operating on one operand only).
-    '''
-    def __init__(self, op, expr):
-        self.token = self.op = op
-        self.expr = expr
-
-
-class Num(AST):
-    '''
-    Holds an INTEGER token and its value.
-    '''
-    def __init__(self, token):
-        self.token = token
-        self.value = token.value
-
-
-class Parser(object):
-    def __init__(self, lexer):
-        self.lexer = lexer
-        # Set current token to the first token taken from input
-        self.current_token = self.lexer.get_next_token()
-    
-    def error(self):
-        raise Exception("Invalid syntax")  # might come back one day to make this error message more user friendly
-
-    def eat(self, token_type):
-        # Compare the current token type with the passed token type
-        # If they match, 'eat' the current token then assign the next token to self.current_token
-        # Otherwise raise an exception
-        # This will make more sense after reading the code for the expr() function below
-        if self.current_token.type == token_type:
-            self.current_token = self.lexer.get_next_token()
-        else:
-            self.error()
-    
-    def factor(self):
-        '''
-        factor : (ADD | SUB) factor INTEGER | LPAREN expr RPAREN
-        '''
-        token = self.current_token
-        if token.type == ADD:
-            self.eat(ADD)
-            node = UnaryOp(token, self.factor())
-            return node
-        elif token.type == SUB:
-            self.eat(SUB)
-            node = UnaryOp(token, self.factor())
-            return node
-        elif token.type == INTEGER:
-            self.eat(INTEGER)
-            return Num(token)
-        elif token.type == LPAREN:
-            self.eat(LPAREN)
-            node = self.expr()
-            self.eat(RPAREN)
-            return node
-    
-    def term(self):
-        '''
-        term : factor ((MUL | DIV) factor)*
-        '''
-        node = self.factor()
-
-        while self.current_token.type in (MUL, DIV):
-            token = self.current_token
-            if token.type == MUL:
-                self.eat(MUL)
-            if token.type == DIV:
-                self.eat(DIV)
-            
-            node = BinOp(left=node, op=token, right=self.factor())
-        
-        return node
-    
-    def expr(self):
-        '''
-        Arithmetic expression parser
-
-        Grammar:
-        expr   : term ((ADD | SUB) term)*
-        term   : factor ((MUL | DIV) factor)*
-        factor : INTEGER | LPAREN expr RPAREN
-        '''
-
-        node = self.term()
-
-        while self.current_token.type in (ADD, SUB):
-            token = self.current_token
-            if token.type == ADD:
-                self.eat(ADD)
-            elif token.type == SUB:
-                self.eat(SUB)
-            
-            node = BinOp(left=node, op=token, right=self.term())
-        
-        return node
+class Parser():
+    def __init__(self):
+        self.pg = ParserGenerator(
+            # A list of all token names accepted by the parser
+            ['OUTPUT', 'NEWLINE', 'ADD', 'SUB', 'MUL', 'DIV', 'NUMBER'], 
+            # A list of precedence rules
+            precedence = [
+                ('left', ['ADD', 'SUB']),
+                ('left', ['MUL', 'DIV'])
+            ]
+        )
     
     def parse(self):
-        node = self.expr()
-        if self.current_token.type != EOF:
-            self.error()  # Throw an error if there are unconsumed tokens left
-        return node
+        @self.pg.production("program : OUTPUT expression NEWLINE")
+        def program(p):
+            return Output(p[1])
+        
+        @self.pg.production("expression : expression ADD expression")
+        @self.pg.production("expression : expression SUB expression")
+        @self.pg.production("expression : expression MUL expression")
+        @self.pg.production("expression : expression DIV expression")
+        def expression(p):
+            left = p[0]
+            right = p[2]
+            operator = p[1]
+            if operator.gettokentype() == 'ADD':
+                return Add(left, right)
+            elif operator.gettokentype() == 'SUB':
+                return Sub(left, right)
+            elif operator.gettokentype() == 'MUL':
+                return Mul(left, right)
+            elif operator.gettokentype() == 'DIV':
+                return Div(left, right)
+        
+        @self.pg.production("expression : NUMBER")
+        def number(p):
+            return Number(p[0].value)
+        
+        @self.pg.error
+        def error_handle(token):
+            raise ValueError(token)
+    
+    def get_parser(self):
+        return self.pg.build()
