@@ -7,8 +7,6 @@ class Lexer():
     def _add_tokens(self):
         # Output
         self.lexer.add('OUTPUT', r'output')
-        # Newline
-        self.lexer.add('NEWLINE', r'\n')
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')
@@ -17,8 +15,8 @@ class Lexer():
         # Numbers
         self.lexer.add('FLOAT', r'\d+\.\d+')  # Check for float before integer!
         self.lexer.add('INTEGER', r'\d+')
-        # Ignore all whitespace characters except for newline
-        self.lexer.ignore('[ \t\r\f\v]+')
+        # Ignore all whitespace characters
+        self.lexer.ignore(r'\s+')
     
     def get_lexer(self):
         self._add_tokens()

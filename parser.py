@@ -5,7 +5,7 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['OUTPUT', 'NEWLINE', 'ADD', 'SUB', 'MUL', 'DIV', 'INTEGER', 'FLOAT'], 
+            ['OUTPUT', 'ADD', 'SUB', 'MUL', 'DIV', 'INTEGER', 'FLOAT'], 
             # A list of precedence rules
             precedence = [
                 ('left', ['ADD', 'SUB']),
@@ -14,7 +14,7 @@ class Parser():
         )
     
     def parse(self):
-        @self.pg.production("statement : OUTPUT expression NEWLINE")
+        @self.pg.production("statement : OUTPUT expression")
         def statement_output(p):
             return Output(p[1])
         
@@ -46,8 +46,7 @@ class Parser():
         @self.pg.error
         def error_handle(token):
             # Error message for those pesky '$end' tokens
-            # Right now, the most likely cause for one of these is a missing newline
-            # Typically missing from the end of the test.txt file
+            # Is this needed anymore now that NEWLINE tokens don't exist anymore?
             if token.gettokentype() == "$end":
                 raise ValueError("Ran into a $end token where it wasn't expected. Maybe you missed a newline somewhere?")
             # Generic error message
