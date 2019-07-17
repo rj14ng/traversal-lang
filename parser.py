@@ -51,6 +51,17 @@ class Parser():
             else:
                 raise AssertionError("This should not be possible!")
         
+        @self.pg.production("expression : ADD expression")
+        @self.pg.production("expression : SUB expression")
+        def expression_unaryop(state, p):
+            operator = p[0]
+            if operator.gettokentype() == 'ADD':
+                return UnaryAdd(p[1])
+            elif operator.gettokentype() == 'SUB':
+                return UnarySub(p[1])
+            else:
+                raise AssertionError("This should not be possible!")
+        
         @self.pg.production("expression : INTEGER")
         def expr_int(state, p):
             return Integer(int(p[0].getstr()))

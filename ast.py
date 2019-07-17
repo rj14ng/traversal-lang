@@ -44,6 +44,21 @@ class Div(BinaryOp):
         return self.left.eval() / self.right.eval()
 
 
+class UnaryOp():
+    def __init__(self, value):
+        self.value = value
+
+
+class UnaryAdd(UnaryOp):
+    def eval(self):
+        return +self.value.eval()
+
+
+class UnarySub(UnaryOp):
+    def eval(self):
+        return -self.value.eval()
+
+
 class Output():
     def __init__(self, value):
         self.value = value
