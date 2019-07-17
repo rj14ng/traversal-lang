@@ -1,3 +1,7 @@
+class ParserState(object):  # State instance which gets passed to parser
+    def __init__(self):
+        self.variables = {}  # Hold a dict of declared variables
+
 class Integer():
     def __init__(self, value):
         self.value = value
@@ -46,3 +50,11 @@ class Output():
     
     def eval(self):
         print(self.value.eval())
+
+
+class Variable():
+    def __init__(self, value):
+        self.value = value
+    
+    def eval(self):
+        return self.value
