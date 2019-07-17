@@ -3,8 +3,10 @@ from ast import ParserState
 from parser import Parser
 
 with open("test.txt", 'r') as test_input:
+    # State instance holds dict of variables
     state = ParserState()
     variables = {}
+    
     for line in test_input.readlines():  # Reading line-by-line
         # Lexer
         lexer = Lexer().get_lexer()

@@ -64,6 +64,7 @@ class Parser():
             # Cannot return value of a variable if it isn't defined
             if state.variables.get(p[0].getstr(), None) is None:
                 raise ValueError(f"Variable {p[0].getstr()} is not yet defined.")
+            
             # Otherwise return value
             return Variable(state.variables[p[0].getstr()])
 
