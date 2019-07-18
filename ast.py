@@ -3,8 +3,33 @@ class ParserState(object):  # State instance which gets passed to parser
         self.variables = {}  # Hold a dict of declared variables
 
 
+# Comparable
+class Comparable():
+    '''
+    A data type that can be compared.
+    '''
+    # Default __init__, usually override in child classes so 'value' is the correct data type
+    def __init__(self, value):
+        self.value = value
+
+    def equals(self, right):
+        return Condition(self.value == right.value)
+    
+    def less_than_equals(self, right):
+        return Condition(self.value <= right.value)
+    
+    def less_than(self, right):
+        return Condition(self.value < right.value)
+
+    def greater_than_equals(self, right):
+        return Condition(self.value >= right.value)
+    
+    def greater_than(self, right):
+        return Condition(self.value > right.value)
+
+
 # Integers
-class Integer():
+class Integer(Comparable):
     def __init__(self, value):
         self.value = int(value)
     
@@ -13,9 +38,6 @@ class Integer():
     
     def eval(self):
         return self
-    
-    def equals(self, right):
-        return Condition(self.value == right.value)
     
     def add(self, right):
         if type(right) is Integer:
@@ -45,7 +67,7 @@ class Integer():
 
 
 # Floats
-class Decimal():
+class Decimal(Comparable):
     def __init__(self, value):
         self.value = float(value)
     
@@ -54,9 +76,6 @@ class Decimal():
     
     def eval(self):
         return self
-    
-    def equals(self, right):
-        return Condition(self.value == right.value)
     
     def add(self, right):
         if type(right) is Integer or type(right) is Decimal:
@@ -80,7 +99,7 @@ class Decimal():
 
 
 # Strings
-class Text():
+class Text(Comparable):
     def __init__(self, value):
         self.value = str(value)
     
@@ -89,9 +108,6 @@ class Text():
     
     def eval(self):
         return self
-
-    def equals(self, right):
-        return Condition(self.value == right.value)
 
     def add(self, right):
         if type(right) is Text:  # Can only add strings to strings
@@ -109,7 +125,7 @@ class Text():
 
 
 # Booleans
-class Condition():
+class Condition(Comparable):
     def __init__(self, value):
         self.value = bool(value)
     
@@ -118,9 +134,6 @@ class Condition():
     
     def eval(self):
         return self
-    
-    def equals(self, right):
-        return Condition(self.value == right.value)
     
     def add(self, right):
         raise ValueError("You cannot add anything to a condition!")
@@ -153,6 +166,26 @@ class NotEquals(BinaryOp):
         result = self.left.eval().equals(self.right.eval())
         result.value = not result.value  # Invert boolean value of Condition object
         return result  # Returns a Condition object, not a boolean (returning 'not result' would be a boolean)
+
+
+class LessThanEquals(BinaryOp):
+    def eval(self):
+        return self.left.eval().less_than_equals(self.right.eval())
+
+
+class LessThan(BinaryOp):
+    def eval(self):
+        return self.left.eval().less_than(self.right.eval())
+
+
+class GreaterThanEquals(BinaryOp):
+    def eval(self):
+        return self.left.eval().greater_than_equals(self.right.eval())
+
+
+class GreaterThan(BinaryOp):
+    def eval(self):
+        return self.left.eval().greater_than(self.right.eval())
 
 
 class Add(BinaryOp):

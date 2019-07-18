@@ -6,10 +6,10 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
             ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'VARIABLE',
-             'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'NOTEQUALS', 'LPAREN', 'RPAREN'],
+             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'LPAREN', 'RPAREN'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
-                ('left', ['EQUALS', 'NOTEQUALS']),
+                ('left', ['=', 'NOT=', '<=', '<', '>=', '>']),
                 ('left', ['ADD', 'SUB']),
                 ('left', ['MUL', 'DIV']),
                 ('left', ['COMMENT'])  # Add comments to precedence list to avoid shift/reduce conflict, but not sure *where* it actually should be
@@ -21,7 +21,7 @@ class Parser():
         def statement_output(state, p):
             return Output(p[1])
         
-        @self.pg.production("statement : VARIABLE EQUALS expression")
+        @self.pg.production("statement : VARIABLE = expression")
         def statement_assignment(state, p):
             # Currently variables are immutable - can only assign if it doesn't exist yet
             if state.variables.get(p[0].getstr(), None) is None:
@@ -65,16 +65,28 @@ class Parser():
             else:
                 raise AssertionError("This should not be possible!")
         
-        @self.pg.production("expression : expression EQUALS expression")
-        @self.pg.production("expression : expression NOTEQUALS expression")
+        @self.pg.production("expression : expression = expression")
+        @self.pg.production("expression : expression NOT= expression")
+        @self.pg.production("expression : expression <= expression")
+        @self.pg.production("expression : expression < expression")
+        @self.pg.production("expression : expression >= expression")
+        @self.pg.production("expression : expression > expression")
         def expression_equality(state, p):
             left = p[0]
             right = p[2]
             operator = p[1]
-            if operator.gettokentype() == 'EQUALS':
+            if operator.gettokentype() == '=':
                 return Equals(left, right)
-            if operator.gettokentype() == 'NOTEQUALS':
+            elif operator.gettokentype() == 'NOT=':
                 return NotEquals(left, right)
+            elif operator.gettokentype() == '<=':
+                return LessThanEquals(left, right)
+            elif operator.gettokentype() == '<':
+                return LessThan(left, right)
+            elif operator.gettokentype() == '>=':
+                return GreaterThanEquals(left, right)
+            elif operator.gettokentype() == '>':
+                return GreaterThan(left, right)
             else:
                 raise AssertionError("This should not be possible!")
         

@@ -23,9 +23,14 @@ class Lexer():
         self.lexer.add('MUL', r'\*')
         self.lexer.add('DIV', r'/')
         # Equals acts as assignment (=) and equality (==) operator
-        self.lexer.add('EQUALS', r'=')
+        self.lexer.add('=', r'=')
         # Not equals acts as != operator
-        self.lexer.add('NOTEQUALS', r'not=')
+        self.lexer.add('NOT=', r'not=')
+        # Comparison operators
+        self.lexer.add('<=', r'<=')
+        self.lexer.add('<', r'<')
+        self.lexer.add('>=', r'>=')
+        self.lexer.add('>', r'>')
         # Variables
         self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)
         # Parentheses
