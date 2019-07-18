@@ -5,15 +5,16 @@ class Lexer():
         self.lexer = LexerGenerator()
     
     def _add_tokens(self):
+        # NB - All keywords must include (?!\w) in regex so they don't match if other characters appear afterwards
         # String AKA text
         self.lexer.add('TEXT', '(""".*?""")|(".*?")|(\'.*?\')')  # Strings denoted by """string""", "string", and 'string'
         # Numbers (float AKA decimal, integer)
         self.lexer.add('DECIMAL', r'\d+\.\d+')  # (Precedence - floats before integers which would otherwise match)
         self.lexer.add('INTEGER', r'\d+')
         # Output/print
-        self.lexer.add('OUTPUT', r'output|print')
+        self.lexer.add('OUTPUT', r'output(?!\w)|print(?!\w)')
         # Boolean AKA condition
-        self.lexer.add('CONDITION', r'(?i)true|false')  # Case insensitive
+        self.lexer.add('CONDITION', r'(?i)true(?!\w)|false(?!\w)')  # Case insensitive
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')
