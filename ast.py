@@ -74,8 +74,25 @@ class String():
     def __init__(self, value):
         self.value = str(value)
     
+    def __repr__(self):
+        return str(self.value)
+    
     def eval(self):
         return self
+
+    def add(self, right):
+        if type(right) is String:  # Can only add strings to strings
+            return String(self.value + right.value)
+        raise ValueError("You cannot add that to text!")
+    
+    def sub(self, right):
+        raise ValueError("You cannot subtract text!")
+    
+    def mul(self, right):
+        raise ValueError("You cannot multiply text!")
+    
+    def div(self, right):
+        raise ValueError("You cannot divide text!")
 
 
 class BinaryOp():
