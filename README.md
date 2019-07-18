@@ -22,6 +22,7 @@ Test code should be placed in the `test.txt` file.
 - Booleans (`condition`)
 
 ## Grammar
+- Comments indicated by `//`
 - Typical arithmetic operators `+`, `-`, `*`, `/` (only true division)
 - Print to stdout using `output` or `print`
 - Assignment operator using `=`
