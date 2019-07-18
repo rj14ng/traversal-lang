@@ -5,7 +5,7 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['STRING', 'FLOAT', 'INTEGER', 'OUTPUT', 'VARIABLE', 'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'LPAREN', 'RPAREN'], 
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'VARIABLE', 'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'LPAREN', 'RPAREN'], 
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['ADD', 'SUB']),
@@ -66,13 +66,13 @@ class Parser():
         def expr_int(state, p):
             return Integer(int(p[0].getstr()))
         
-        @self.pg.production("expression : FLOAT")
+        @self.pg.production("expression : DECIMAL")
         def expr_float(state, p):
-            return Float(float(p[0].getstr()))
+            return Decimal(float(p[0].getstr()))
         
-        @self.pg.production("expression : STRING")
+        @self.pg.production("expression : TEXT")
         def expr_string(state, p):
-            return String(p[0].getstr().strip('"\''))  # Strip " or '
+            return Text(p[0].getstr().strip('"\''))  # Strip " or '
 
         @self.pg.production("expression : VARIABLE")
         def expr_variable(state, p):

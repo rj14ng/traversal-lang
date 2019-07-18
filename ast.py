@@ -2,6 +2,8 @@ class ParserState(object):  # State instance which gets passed to parser
     def __init__(self):
         self.variables = {}  # Hold a dict of declared variables
 
+
+# Integers
 class Integer():
     def __init__(self, value):
         self.value = int(value)
@@ -15,31 +17,32 @@ class Integer():
     def add(self, right):
         if type(right) is Integer:
             return Integer(self.value + right.value)
-        if type(right) is Float:
-            return Float(self.value + right.value)
+        if type(right) is Decimal:
+            return Decimal(self.value + right.value)
         raise ValueError("You cannot add that to an integer!")
     
     def sub(self, right):
         if type(right) is Integer:
             return Integer(self.value - right.value)
-        if type(right) is Float:
-            return Float(self.value - right.value)
+        if type(right) is Decimal:
+            return Decimal(self.value - right.value)
         raise ValueError("You cannot subtract that from an integer!")
     
     def mul(self, right):
         if type(right) is Integer:
             return Integer(self.value * right.value)
-        if type(right) is Float:
-            return Float(self.value * right.value)
+        if type(right) is Decimal:
+            return Decimal(self.value * right.value)
         raise ValueError("You cannot multiply that with an integer!")
     
     def div(self, right):
-        if type(right) is Integer or type(right) is Float:  # Always perform true divison
-            return Float(self.value / right.value)
+        if type(right) is Integer or type(right) is Decimal:  # Always perform true divison
+            return Decimal(self.value / right.value)
         raise ValueError("You cannot divide that from an integer!")
 
 
-class Float():
+# Floats
+class Decimal():
     def __init__(self, value):
         self.value = float(value)
     
@@ -50,27 +53,28 @@ class Float():
         return self
     
     def add(self, right):
-        if type(right) is Integer or type(right) is Float:
-            return Float(self.value + right.value)
+        if type(right) is Integer or type(right) is Decimal:
+            return Decimal(self.value + right.value)
         raise ValueError("You cannot add that to a decimal number!")
     
     def sub(self, right):
-        if type(right) is Integer or type(right) is Float:
-            return Float(self.value - right.value)
+        if type(right) is Integer or type(right) is Decimal:
+            return Decimal(self.value - right.value)
         raise ValueError("You cannot subtract that from a decimal number!")
     
     def mul(self, right):
-        if type(right) is Integer or type(right) is Float:
-            return Float(self.value * right.value)
+        if type(right) is Integer or type(right) is Decimal:
+            return Decimal(self.value * right.value)
         raise ValueError("You cannot multiply that with a decimal number!")
     
     def div(self, right):
-        if type(right) is Integer or type(right) is Float:  # Always perform true divison
-            return Float(self.value / right.value)
+        if type(right) is Integer or type(right) is Decimal:  # Always perform true divison
+            return Decimal(self.value / right.value)
         raise ValueError("You cannot divide that from a decimal number!")
 
 
-class String():
+# Strings
+class Text():
     def __init__(self, value):
         self.value = str(value)
     
@@ -81,8 +85,8 @@ class String():
         return self
 
     def add(self, right):
-        if type(right) is String:  # Can only add strings to strings
-            return String(self.value + right.value)
+        if type(right) is Text:  # Can only add strings to strings
+            return Text(self.value + right.value)
         raise ValueError("You cannot add that to text!")
     
     def sub(self, right):
@@ -95,6 +99,7 @@ class String():
         raise ValueError("You cannot divide text!")
 
 
+# Binary operators
 class BinaryOp():
     def __init__(self, left, right):
         self.left = left
@@ -121,6 +126,7 @@ class Div(BinaryOp):
         return self.left.eval().div(self.right.eval())
 
 
+# Unary operators
 class UnaryOp():
     def __init__(self, value):
         self.value = value
@@ -136,6 +142,7 @@ class UnarySub(UnaryOp):
         return self.value.eval().mul(Integer(-1))
 
 
+# Print
 class Output():
     def __init__(self, value):
         self.value = value
@@ -144,6 +151,7 @@ class Output():
         print(self.value.eval())
 
 
+# Variables
 class Variable():
     def __init__(self, value):
         self.value = value

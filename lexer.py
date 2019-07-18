@@ -5,10 +5,10 @@ class Lexer():
         self.lexer = LexerGenerator()
     
     def _add_tokens(self):
-        # String
-        self.lexer.add('STRING', '(""".*?""")|(".*?")|(\'.*?\')')  # Strings denoted by """string""", "string", and 'string'
-        # Numbers
-        self.lexer.add('FLOAT', r'\d+\.\d+')  # (Precedence - floats before integers which would otherwise match)
+        # String AKA text
+        self.lexer.add('TEXT', '(""".*?""")|(".*?")|(\'.*?\')')  # Strings denoted by """string""", "string", and 'string'
+        # Numbers (float AKA decimal, integer)
+        self.lexer.add('DECIMAL', r'\d+\.\d+')  # (Precedence - floats before integers which would otherwise match)
         self.lexer.add('INTEGER', r'\d+')
         # Output/print
         self.lexer.add('OUTPUT', r'output|print')  # (Precedence - keywords before variable names which would otherwise match)
