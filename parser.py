@@ -5,12 +5,14 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'VARIABLE', 'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'NOTEQUALS', 'LPAREN', 'RPAREN'], 
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'VARIABLE',
+             'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'NOTEQUALS', 'LPAREN', 'RPAREN'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['EQUALS', 'NOTEQUALS']),
                 ('left', ['ADD', 'SUB']),
-                ('left', ['MUL', 'DIV'])
+                ('left', ['MUL', 'DIV']),
+                ('left', ['COMMENT'])  # Add comments to precedence list to avoid shift/reduce conflict, but not sure *where* it actually should be
             ]
         )
     
@@ -30,9 +32,15 @@ class Parser():
             raise ValueError(f"Variable {p[0].getstr()} is already defined.")
         
         @self.pg.production("statement : ")
-        # Ignore empty lines
+        @self.pg.production("statement : COMMENT")
+        # Ignore empty and commented lines
         def statement_empty(state, p):
             return EmptyLine()
+        
+        @self.pg.production("statement : statement COMMENT")
+        # Ignore comments after a line of code
+        def statement_comment(state, p):
+            return p[0]
         
         @self.pg.production("expression : LPAREN expression RPAREN")
         def expression_paren(state, p):

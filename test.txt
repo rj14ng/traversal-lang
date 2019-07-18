@@ -1,41 +1,48 @@
-output 17 + 3 * 8 / 6
-output 38 / 9 * 27 + 3
+// Test mathematical precedence
+output 17 + 3 * 8 / 6  // 21.0
+output 38 / 9 * 27 + 3  // 117.0
 
-output 3.142 * 2
-print 2.718 / 2
+// Test floats AKA decimals
+output 3.142 * 2  // 6.284
+print 2.718 / 2  // 1.359
 
-print 3 + 1 / 2
-print (3 + 1) / 2
-print (-1 - 3) * 4
-print -3 / 3
+// Test parentheses
+print 3 + 1 / 2  // 3.5
+print (3 + 1) / 2  // 2.0
+print (-1 - 3) * 4  // -16
+print -3 / 3  // -1.0
 
-output 3 - - 7
-output 5 - + + (3 + - - 10)
+// Test unary operators
+output 3 - - 7  // 10
+output 5 - + + (3 + - - 10)  // -8
 
+// Test variables
 my_float = 1 + 3.0
 my_int = 8
-output my_float
-output my_int
-output my_float + my_int
-output my_float - my_int
+output my_float  // 4.0
+output my_int  // 8
+output my_float + my_int  // 12.0
+output my_float - my_int  // -4.0
 
+// Test strings AKA text
 my_str1 = "hello"
 my_str2 = "world"
-print my_str1
-print my_str2
-print my_str1 + ' ' + my_str2 + '!'
+print my_str1  // hello
+print my_str2  // world
+print my_str1 + ' ' + my_str2 + '!'  // hello world!
 
+// Test booleans AKA conditions
 my_bool1 = tRuE
 my_bool2 = FaLSe
-print my_bool1
-print my_bool2
+print my_bool1  // true
+print my_bool2  // false
 my_bool3 = 1 = 1
 my_bool4 = 1 = 2
-print my_bool3
-print my_bool4
-print 'yes' not= 'no'
-print true = false
-print true not= 'true'
-print true not= 1
-print 1 = 1 = 1
-print 1 = 1 = 2
+print my_bool3  // true
+print my_bool4  // false
+print 'yes' not= 'no'  // true
+print true = false  // false
+print true not= 'true'  // true
+print true not= 1  // false
+print 1 = 1 = 1  // true
+print 1 = 1 = 2  // false

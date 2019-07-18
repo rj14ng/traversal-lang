@@ -15,6 +15,8 @@ class Lexer():
         self.lexer.add('OUTPUT', r'output(?!\w)|print(?!\w)')
         # Boolean AKA condition
         self.lexer.add('CONDITION', r'(?i)true(?!\w)|false(?!\w)')  # Case insensitive
+        # Comments
+        self.lexer.add('COMMENT', r'//.*')  # Matches // and all following characters
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')
