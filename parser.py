@@ -28,6 +28,10 @@ class Parser():
             # Otherwise raise error
             raise ValueError(f"Variable {p[0].getstr()} is already defined.")
         
+        @self.pg.production("statement : ")
+        def statement_empty(state, p):
+            return EmptyLine()
+        
         @self.pg.production("expression : LPAREN expression RPAREN")
         def expr_paren(state, p):
             return p[1]

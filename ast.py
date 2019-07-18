@@ -161,3 +161,8 @@ class Variable():
     
     def eval(self):
         return self.value.eval()
+
+# Empty line
+class EmptyLine():
+    def eval(self):
+        return None
