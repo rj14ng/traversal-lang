@@ -24,3 +24,18 @@ my_str2 = "world"
 print my_str1
 print my_str2
 print my_str1 + ' ' + my_str2 + '!'
+
+my_bool1 = tRuE
+my_bool2 = FaLSe
+print my_bool1
+print my_bool2
+my_bool3 = 1 = 1
+my_bool4 = 1 = 2
+print my_bool3
+print my_bool4
+print 'yes' not= 'no'
+print true = false
+print true not= 'true'
+print true not= 1
+print 1 = 1 = 1
+print 1 = 1 = 2

@@ -14,6 +14,9 @@ class Integer():
     def eval(self):
         return self
     
+    def equals(self, right):
+        return Condition(self.value == right.value)
+    
     def add(self, right):
         if type(right) is Integer:
             return Integer(self.value + right.value)
@@ -52,6 +55,9 @@ class Decimal():
     def eval(self):
         return self
     
+    def equals(self, right):
+        return Condition(self.value == right.value)
+    
     def add(self, right):
         if type(right) is Integer or type(right) is Decimal:
             return Decimal(self.value + right.value)
@@ -84,6 +90,9 @@ class Text():
     def eval(self):
         return self
 
+    def equals(self, right):
+        return Condition(self.value == right.value)
+
     def add(self, right):
         if type(right) is Text:  # Can only add strings to strings
             return Text(self.value + right.value)
@@ -99,11 +108,51 @@ class Text():
         raise ValueError("You cannot divide text!")
 
 
+# Booleans
+class Condition():
+    def __init__(self, value):
+        self.value = bool(value)
+    
+    def __repr__(self):
+        return str(self.value).lower()
+    
+    def eval(self):
+        return self
+    
+    def equals(self, right):
+        return Condition(self.value == right.value)
+    
+    def add(self, right):
+        raise ValueError("You cannot add anything to a condition!")
+    
+    def sub(self, right):
+        raise ValueError("You cannot subtract anything from a condition!")
+    
+    def mul(self, right):
+        raise ValueError("You cannot multiply anything with a condition!")
+    
+    def div(self, right):
+        raise ValueError("You cannot divide anything from a condition!")
+
+
 # Binary operators
 class BinaryOp():
     def __init__(self, left, right):
         self.left = left
         self.right = right
+
+
+class Equals(BinaryOp):
+    def eval(self):
+        result = self.left.eval().equals(self.right.eval())
+        return result
+
+
+class NotEquals(BinaryOp):
+    def eval(self):
+        result = self.left.eval().equals(self.right.eval())
+        result.value = not result.value  # Invert boolean value of Condition object
+        return result  # Returns a Condition object, not a boolean (returning 'not result' would be a boolean)
 
 
 class Add(BinaryOp):

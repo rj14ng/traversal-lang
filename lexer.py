@@ -11,16 +11,20 @@ class Lexer():
         self.lexer.add('DECIMAL', r'\d+\.\d+')  # (Precedence - floats before integers which would otherwise match)
         self.lexer.add('INTEGER', r'\d+')
         # Output/print
-        self.lexer.add('OUTPUT', r'output|print')  # (Precedence - keywords before variable names which would otherwise match)
-        # Variables
-        self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')
+        self.lexer.add('OUTPUT', r'output|print')
+        # Boolean AKA condition
+        self.lexer.add('CONDITION', r'(?i)true|false')  # Case insensitive
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')
         self.lexer.add('MUL', r'\*')
         self.lexer.add('DIV', r'/')
-        # Equals
+        # Equals acts as assignment (=) and equality (==) operator
         self.lexer.add('EQUALS', r'=')
+        # Not equals acts as != operator
+        self.lexer.add('NOTEQUALS', r'not=')
+        # Variables
+        self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)
         # Parentheses
         self.lexer.add('LPAREN', r'\(')
         self.lexer.add('RPAREN', r'\)')

@@ -5,9 +5,10 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'VARIABLE', 'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'LPAREN', 'RPAREN'], 
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'VARIABLE', 'ADD', 'SUB', 'MUL', 'DIV', 'EQUALS', 'NOTEQUALS', 'LPAREN', 'RPAREN'], 
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
+                ('left', ['EQUALS', 'NOTEQUALS']),
                 ('left', ['ADD', 'SUB']),
                 ('left', ['MUL', 'DIV'])
             ]
@@ -29,11 +30,12 @@ class Parser():
             raise ValueError(f"Variable {p[0].getstr()} is already defined.")
         
         @self.pg.production("statement : ")
+        # Ignore empty lines
         def statement_empty(state, p):
             return EmptyLine()
         
         @self.pg.production("expression : LPAREN expression RPAREN")
-        def expr_paren(state, p):
+        def expression_paren(state, p):
             return p[1]
         
         @self.pg.production("expression : expression ADD expression")
@@ -55,6 +57,19 @@ class Parser():
             else:
                 raise AssertionError("This should not be possible!")
         
+        @self.pg.production("expression : expression EQUALS expression")
+        @self.pg.production("expression : expression NOTEQUALS expression")
+        def expression_equality(state, p):
+            left = p[0]
+            right = p[2]
+            operator = p[1]
+            if operator.gettokentype() == 'EQUALS':
+                return Equals(left, right)
+            if operator.gettokentype() == 'NOTEQUALS':
+                return NotEquals(left, right)
+            else:
+                raise AssertionError("This should not be possible!")
+        
         @self.pg.production("expression : ADD expression")
         @self.pg.production("expression : SUB expression")
         def expression_unaryop(state, p):
@@ -67,19 +82,23 @@ class Parser():
                 raise AssertionError("This should not be possible!")
         
         @self.pg.production("expression : INTEGER")
-        def expr_int(state, p):
+        def expression_integer(state, p):
             return Integer(int(p[0].getstr()))
         
         @self.pg.production("expression : DECIMAL")
-        def expr_float(state, p):
+        def expression_decimal(state, p):
             return Decimal(float(p[0].getstr()))
         
         @self.pg.production("expression : TEXT")
-        def expr_string(state, p):
+        def expression_text(state, p):
             return Text(p[0].getstr().strip('"\''))  # Strip " or '
+        
+        @self.pg.production("expression : CONDITION")
+        def expression_condition(state, p):
+            return Condition(True if p[0].getstr().lower() == "true" else False)
 
         @self.pg.production("expression : VARIABLE")
-        def expr_variable(state, p):
+        def expression_variable(state, p):
             # Cannot return value of a variable if it isn't defined
             if state.variables.get(p[0].getstr(), None) is None:
                 raise ValueError(f"Variable {p[0].getstr()} is not yet defined.")
