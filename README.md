@@ -15,6 +15,11 @@ Test code should be placed in the `test.txt` file.
 - Dynamic typing
 - Strongly typed (for now?)
 
+## Data types
+- Integers (`integer`)
+- Floats (`decimal`)
+- Strings (`text`)
+
 ## Grammar
 - Typical arithmetic operators `+`, `-`, `*`, `/` (only true division)
 - Print to stdout using `output` or `print`
