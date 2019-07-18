@@ -27,4 +27,4 @@ Test code should be placed in the `test.txt` file.
 - Print to stdout using `output` or `print`
 - Assignment operator using `=`
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
-- Equality operators are `=` and `not=`
+- Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
