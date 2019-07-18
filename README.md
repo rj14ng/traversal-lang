@@ -19,8 +19,11 @@ Test code should be placed in the `test.txt` file.
 - Integers (`integer`)
 - Floats (`decimal`)
 - Strings (`text`)
+- Booleans (`condition`)
 
 ## Grammar
 - Typical arithmetic operators `+`, `-`, `*`, `/` (only true division)
 - Print to stdout using `output` or `print`
 - Assignment operator using `=`
+- Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
+- Equality operators are `=` and `not=`
