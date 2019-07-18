@@ -28,3 +28,5 @@ Test code should be placed in the `test.txt` file.
 - Assignment operator using `=`
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
+- String multiplication by integers (just like Python!)
+- String concatenation can be done with any data type

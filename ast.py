@@ -42,22 +42,26 @@ class Integer(Comparable):
     def add(self, right):
         if type(right) is Integer:
             return Integer(self.value + right.value)
-        if type(right) is Decimal:
+        elif type(right) is Decimal:
             return Decimal(self.value + right.value)
+        elif type(right) is Text:
+            return Text(str(self.value)+ right.value)
         raise ValueError("You cannot add that to an integer!")
     
     def sub(self, right):
         if type(right) is Integer:
             return Integer(self.value - right.value)
-        if type(right) is Decimal:
+        elif type(right) is Decimal:
             return Decimal(self.value - right.value)
         raise ValueError("You cannot subtract that from an integer!")
     
     def mul(self, right):
         if type(right) is Integer:
             return Integer(self.value * right.value)
-        if type(right) is Decimal:
+        elif type(right) is Decimal:
             return Decimal(self.value * right.value)
+        elif type(right) is Text:
+            return Text(self.value * right.value)
         raise ValueError("You cannot multiply that with an integer!")
     
     def div(self, right):
@@ -80,6 +84,8 @@ class Decimal(Comparable):
     def add(self, right):
         if type(right) is Integer or type(right) is Decimal:
             return Decimal(self.value + right.value)
+        if type(right) is Text:
+            return Text(str(self.value) + right.value)
         raise ValueError("You cannot add that to a decimal number!")
     
     def sub(self, right):
@@ -110,15 +116,21 @@ class Text(Comparable):
         return self
 
     def add(self, right):
-        if type(right) is Text:  # Can only add strings to strings
+        if type(right) is Text:
             return Text(self.value + right.value)
+        elif type(right) is Integer or type(right) is Decimal:
+            return Text(self.value + str(right.value))
+        elif type(right) is Condition:
+            return Text(self.value + str(right.value).lower())  # Booleans are in lower case
         raise ValueError("You cannot add that to text!")
     
     def sub(self, right):
         raise ValueError("You cannot subtract text!")
     
     def mul(self, right):
-        raise ValueError("You cannot multiply text!")
+        if type(right) is Integer:
+            return Text(self.value * right.value)
+        raise ValueError("You cannot multiply text with that!")
     
     def div(self, right):
         raise ValueError("You cannot divide text!")

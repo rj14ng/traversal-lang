@@ -54,3 +54,14 @@ print 3.14 >= 3  // true
 print "aaa" > "zzz" // false
 print true > false  // true
 print false < -1  // false
+
+// Test string concatenation
+print "I am " + 17 + " years old"
+print "Pi is approximately equal to " + 3.14159
+print "1 = 1 is " + (1 = 1)
+print 99 + " bottles of beer on the wall"
+print 2.71828 + " is the approximate value of e"
+
+// Test string multiplication
+print 'W' + 'o' * 10 + 'w'
+print 'A' + 10 * 'a' + 'h'
