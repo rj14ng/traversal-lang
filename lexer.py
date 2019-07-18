@@ -5,13 +5,15 @@ class Lexer():
         self.lexer = LexerGenerator()
     
     def _add_tokens(self):
-        # Output/print
-        self.lexer.add('OUTPUT', r'output|print')  # (Precedence - keywords before variable names which would otherwise match)
-        # Variables
-        self.lexer.add('VARIABLE', "[a-zA-Z_][a-zA-Z0-9_]*")
+        # String
+        self.lexer.add('STRING', '(""".*?""")|(".*?")|(\'.*?\')')  # Strings denoted by """string""", "string", and 'string'
         # Numbers
         self.lexer.add('FLOAT', r'\d+\.\d+')  # (Precedence - floats before integers which would otherwise match)
         self.lexer.add('INTEGER', r'\d+')
+        # Output/print
+        self.lexer.add('OUTPUT', r'output|print')  # (Precedence - keywords before variable names which would otherwise match)
+        # Variables
+        self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')

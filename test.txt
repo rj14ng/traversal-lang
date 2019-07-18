@@ -13,3 +13,4 @@ b = 8
 output a
 output b
 output a + b
+output a - b
