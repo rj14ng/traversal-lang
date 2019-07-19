@@ -42,10 +42,6 @@ print my_bool3  // true
 print my_bool4  // false
 print 'yes' not= 'no'  // true
 print true = false  // false
-print true not= 'true'  // true
-print true = 1  // false
-print 1 = 1 = 1  // false (evaluates into true = 1; booleans are not integers)
-print 1 = 1 = 2  // false
 
 // Test conditional operators
 print 1 <= 2  // true

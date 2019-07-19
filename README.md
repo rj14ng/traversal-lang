@@ -13,7 +13,6 @@ Test code should be placed in the `test.trv` file.
 
 ## Features
 - Dynamic typing
-- Duck typing
 
 ## Data types
 - Integers (`integer`)

@@ -18,8 +18,6 @@ class Integer():
     def equals(self, right):
         if type(right) is Integer or type(right) is Decimal:
             return Condition(self.value == right.value)
-        else:
-            return Condition(False)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer!")
 
     def less_than_equals(self, right):
@@ -87,8 +85,6 @@ class Decimal():
     def equals(self, right):
         if type(right) is Integer or type(right) is Decimal:
             return Condition(self.value == right.value)
-        else:
-            return Condition(False)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number!")
 
     def less_than_equals(self, right):
@@ -148,8 +144,6 @@ class Text():
     def equals(self, right):
         if type(right) is Text:
             return Condition(self.value == right.value)
-        else:
-            return Condition(False)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text!")
 
     def less_than_equals(self, right):
@@ -199,8 +193,6 @@ class Condition():
     def equals(self, right):
         if type(right) is Condition:
             return Condition(self.value == right.value)
-        else:
-            return Condition(False)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition!")
 
     def less_than_equals(self, right):
