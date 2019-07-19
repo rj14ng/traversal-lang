@@ -43,17 +43,13 @@ print my_bool4  // false
 print 'yes' not= 'no'  // true
 print true = false  // false
 print true not= 'true'  // true
-print true not= 1  // false
-print 1 = 1 = 1  // true
+print true = 1  // false
+print 1 = 1 = 1  // false (evaluates into true = 1; booleans are not integers)
 print 1 = 1 = 2  // false
 
 // Test conditional operators
 print 1 <= 2  // true
-print 2 < 1  // false
-print 3.14 >= 3  // true
-print "aaa" > "zzz" // false
-print true > false  // true
-print false < -1  // false
+print 2.1 < 1  // false
 
 // Test string concatenation
 print "I am " + 17 + " years old"

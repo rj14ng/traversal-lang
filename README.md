@@ -30,3 +30,4 @@ Test code should be placed in the `test.txt` file.
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
 - String multiplication by integers (just like Python!)
 - String concatenation can be done with any data type
+- Booleans are not integers

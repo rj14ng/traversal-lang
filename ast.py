@@ -3,33 +3,8 @@ class ParserState(object):  # State instance which gets passed to parser
         self.variables = {}  # Hold a dict of declared variables
 
 
-# Comparable
-class Comparable():
-    '''
-    A data type that can be compared.
-    '''
-    # Default __init__, usually override in child classes so 'value' is the correct data type
-    def __init__(self, value):
-        self.value = value
-
-    def equals(self, right):
-        return Condition(self.value == right.value)
-    
-    def less_than_equals(self, right):
-        return Condition(self.value <= right.value)
-    
-    def less_than(self, right):
-        return Condition(self.value < right.value)
-
-    def greater_than_equals(self, right):
-        return Condition(self.value >= right.value)
-    
-    def greater_than(self, right):
-        return Condition(self.value > right.value)
-
-
 # Integers
-class Integer(Comparable):
+class Integer():
     def __init__(self, value):
         self.value = int(value)
     
@@ -38,6 +13,33 @@ class Integer(Comparable):
     
     def eval(self):
         return self
+    
+    def equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value == right.value)
+        else:
+            return Condition(False)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer!")
+
+    def less_than_equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value <= right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer using '<='!")
+    
+    def less_than(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value < right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer using '<'!")
+
+    def greater_than_equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value >= right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer using '>='!")
+    
+    def greater_than(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value > right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer using '>'!")
     
     def add(self, right):
         if type(right) is Integer:
@@ -71,7 +73,7 @@ class Integer(Comparable):
 
 
 # Floats
-class Decimal(Comparable):
+class Decimal():
     def __init__(self, value):
         self.value = float(value)
     
@@ -80,6 +82,33 @@ class Decimal(Comparable):
     
     def eval(self):
         return self
+
+    def equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value == right.value)
+        else:
+            return Condition(False)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number!")
+
+    def less_than_equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value <= right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number using '<='!")
+    
+    def less_than(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value < right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number using '<'!")
+
+    def greater_than_equals(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value >= right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number using '>='!")
+    
+    def greater_than(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Condition(self.value > right.value)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number using '>'!")
     
     def add(self, right):
         if type(right) is Integer or type(right) is Decimal:
@@ -105,7 +134,7 @@ class Decimal(Comparable):
 
 
 # Strings
-class Text(Comparable):
+class Text():
     def __init__(self, value):
         self.value = str(value)
     
@@ -114,6 +143,25 @@ class Text(Comparable):
     
     def eval(self):
         return self
+
+    def equals(self, right):
+        if type(right) is Text:
+            return Condition(self.value == right.value)
+        else:
+            return Condition(False)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text!")
+
+    def less_than_equals(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text using '<='!")
+    
+    def less_than(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text using '<'!")
+
+    def greater_than_equals(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text using '>='!")
+    
+    def greater_than(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text using '>'!")
 
     def add(self, right):
         if type(right) is Text:
@@ -137,7 +185,7 @@ class Text(Comparable):
 
 
 # Booleans
-class Condition(Comparable):
+class Condition():
     def __init__(self, value):
         self.value = bool(value)
     
@@ -146,6 +194,25 @@ class Condition(Comparable):
     
     def eval(self):
         return self
+
+    def equals(self, right):
+        if type(right) is Condition:
+            return Condition(self.value == right.value)
+        else:
+            return Condition(False)
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition!")
+
+    def less_than_equals(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition using '<='!")
+    
+    def less_than(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition using '<'!")
+
+    def greater_than_equals(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition using '>='!")
+    
+    def greater_than(self, right):
+        raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition using '>'!")
     
     def add(self, right):
         raise ValueError("You cannot add anything to a condition!")
