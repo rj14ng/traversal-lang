@@ -6,7 +6,8 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
             ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'VARIABLE',
-             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'LPAREN', 'RPAREN'],
+             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'LPAREN', 'RPAREN',
+             '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['=', 'NOT=', '<=', '<', '>=', '>']),
@@ -26,7 +27,8 @@ class Parser():
             state.variables[p[0].getstr()] = p[2].eval()
             return p[2]
         
-        @self.pg.production("statement : ")
+        @self.pg.production("terminator : $end")
+        @self.pg.production("statement : terminator")
         @self.pg.production("statement : COMMENT")
         # Ignore empty and commented lines
         def statement_empty(state, p):

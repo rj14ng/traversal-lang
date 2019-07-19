@@ -36,8 +36,8 @@ class Lexer():
         # Parentheses
         self.lexer.add('LPAREN', r'\(')
         self.lexer.add('RPAREN', r'\)')
-        # Ignore all whitespace characters
-        self.lexer.ignore(r'\s+')
+        # Ignore all whitespace characters (remove newline in the future and make into separate token)
+        self.lexer.ignore(r'[ \n\t\r\f\v]+')
     
     def get_lexer(self):
         self._add_tokens()

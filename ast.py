@@ -1,4 +1,5 @@
-class ParserState(object):  # State instance which gets passed to parser
+# State instance which gets passed to parser
+class ParserState(object):
     def __init__(self):
         self.variables = {}  # Hold a dict of declared variables
 
