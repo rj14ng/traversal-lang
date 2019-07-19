@@ -23,13 +23,8 @@ class Parser():
         
         @self.pg.production("statement : VARIABLE = expression")
         def statement_assignment(state, p):
-            # Currently variables are immutable - can only assign if it doesn't exist yet
-            if state.variables.get(p[0].getstr(), None) is None:
-                state.variables[p[0].getstr()] = p[2].eval()
-                return p[2]
-            
-            # Otherwise raise error
-            raise ValueError(f"Variable {p[0].getstr()} is already defined.")
+            state.variables[p[0].getstr()] = p[2].eval()
+            return p[2]
         
         @self.pg.production("statement : ")
         @self.pg.production("statement : COMMENT")

@@ -13,7 +13,7 @@ Test code should be placed in the `test.txt` file.
 
 ## Features
 - Dynamic typing
-- Strongly typed (for now?)
+- Duck typing
 
 ## Data types
 - Integers (`integer`)
