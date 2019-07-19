@@ -1,6 +1,7 @@
 from lexer import Lexer
 from ast import ParserState
 from parser import Parser
+import logging
 
 # Parser state
 state = ParserState()
@@ -34,4 +35,4 @@ elif mode == 2:
             parser.parse(tokens, state=state).eval()
 
         except Exception as e:
-            print(e)  # Probably need better error reporting in the future
+            logging.error(e)
