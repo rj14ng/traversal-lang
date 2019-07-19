@@ -17,7 +17,7 @@ parser = pg.get_parser()
 mode = int(input("input file mode (1) or experimental repl mode (2)? "))
 
 if mode == 1:
-    with open("test.txt", 'r') as test_input:
+    with open("test.trv", 'r') as test_input:
         # State instance holds dict of variables
         state = ParserState()
         variables = {}
