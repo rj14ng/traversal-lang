@@ -1,5 +1,5 @@
-# EPQ
-Repository for Rocco Jiang's Extended Project Qualification.
+# Traversal
+Repository for Rocco Jiang's Extended Project Qualification. Traversal is a simple text-based programming language specifically aimed at teaching young students basic CS concepts, with an intention to bridge the gap between visual block-based languages (e.g. Scratch) and text-based languages (e.g. Python).
 
 ## Requirements
 The parser requires RPly.
@@ -9,7 +9,7 @@ Install using `pip3 install rply`.
 ## Guide
 To run: `python3 main.py`.
 
-Test code should be placed in the `test.txt` file.
+Test code should be placed in the `test.trv` file.
 
 ## Features
 - Dynamic typing
