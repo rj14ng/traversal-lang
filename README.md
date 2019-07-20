@@ -27,6 +27,7 @@ Test code should be placed in the `test.trv` file.
 - Assignment operator using `=`
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
+- Logical operators are `and`, `or`, `not`
 - String multiplication by integers (just like Python!)
 - String concatenation can be done with any data type
 - Booleans are not integers
