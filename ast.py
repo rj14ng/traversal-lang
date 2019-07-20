@@ -40,6 +40,15 @@ class Integer():
             return Condition(self.value > right.value)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to an integer using '>'!")
     
+    def logical_and(self, right):
+        raise ValueError("You can only use 'and' on two conditions!")
+
+    def logical_or(self, right):
+        raise ValueError("You can only use 'or' on two conditions!")
+
+    def logical_not(self):
+        raise ValueError("You can only use 'not' on a condition!")
+    
     def add(self, right):
         if type(right) is Integer:
             return Integer(self.value + right.value)
@@ -106,6 +115,15 @@ class Decimal():
         if type(right) is Integer or type(right) is Decimal:
             return Condition(self.value > right.value)
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a decimal number using '>'!")
+
+    def logical_and(self, right):
+        raise ValueError("You can only use 'and' on two conditions!")
+
+    def logical_or(self, right):
+        raise ValueError("You can only use 'or' on two conditions!")
+
+    def logical_not(self):
+        raise ValueError("You can only use 'not' on a condition!")
     
     def add(self, right):
         if type(right) is Integer or type(right) is Decimal:
@@ -158,6 +176,15 @@ class Text():
     def greater_than(self, right):
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to text using '>'!")
 
+    def logical_and(self, right):
+        raise ValueError("You can only use 'and' on two conditions!")
+
+    def logical_or(self, right):
+        raise ValueError("You can only use 'or' on two conditions!")
+
+    def logical_not(self):
+        raise ValueError("You can only use 'not' on a condition!")
+
     def add(self, right):
         if type(right) is Text:
             return Text(self.value + right.value)
@@ -206,6 +233,19 @@ class Condition():
     
     def greater_than(self, right):
         raise ValueError(f"You cannot compare {type(right).__name__.lower()} to a condition using '>'!")
+
+    def logical_and(self, right):
+        if type(right) is Condition:
+            return Condition(self.value and right.value)
+        raise ValueError("You can only use 'and' on two conditions!")
+
+    def logical_or(self, right):
+        if type(right) is Condition:
+            return Condition(self.value or right.value)
+        raise ValueError("You can only use 'or' on two conditions!")
+
+    def logical_not(self):
+        return Condition(not self.value)
     
     def add(self, right):
         raise ValueError("You cannot add anything to a condition!")
@@ -260,6 +300,16 @@ class GreaterThan(BinaryOp):
         return self.left.eval().greater_than(self.right.eval())
 
 
+class And(BinaryOp):
+    def eval(self):
+        return self.left.eval().logical_and(self.right.eval())
+
+
+class Or(BinaryOp):
+    def eval(self):
+        return self.left.eval().logical_or(self.right.eval())
+
+
 class Add(BinaryOp):
     def eval(self):
         return self.left.eval().add(self.right.eval())
@@ -284,6 +334,11 @@ class Div(BinaryOp):
 class UnaryOp():
     def __init__(self, value):
         self.value = value
+
+
+class Not(UnaryOp):
+    def eval(self):
+        return self.value.eval().logical_not()
 
 
 class UnaryAdd(UnaryOp):

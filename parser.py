@@ -6,10 +6,12 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
             ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'VARIABLE',
-             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'LPAREN', 'RPAREN',
-             '$end'],
+             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
+             'LPAREN', 'RPAREN', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
+                ('left', ['AND', 'OR']),
+                ('left', ['NOT']),
                 ('left', ['=', 'NOT=', '<=', '<', '>=', '>']),
                 ('left', ['ADD', 'SUB']),
                 ('left', ['MUL', 'DIV']),
@@ -86,6 +88,23 @@ class Parser():
                 return GreaterThan(left, right)
             else:
                 raise AssertionError("This should not be possible!")
+        
+        @self.pg.production("expression : expression AND expression")
+        @self.pg.production("expression : expression OR expression")
+        def expression_and_or(state, p):
+            left = p[0]
+            right = p[2]
+            operator = p[1]
+            if operator.gettokentype() == 'AND':
+                return And(left, right)
+            elif operator.gettokentype() == 'OR':
+                return Or(left, right)
+            else:
+                raise AssertionError("This should not be possible!")
+        
+        @self.pg.production("expression : NOT expression")
+        def expression_not(state, p):
+            return Not(p[1])
         
         @self.pg.production("expression : ADD expression")
         @self.pg.production("expression : SUB expression")

@@ -31,6 +31,10 @@ class Lexer():
         self.lexer.add('<', r'<')
         self.lexer.add('>=', r'>=')
         self.lexer.add('>', r'>')
+        # Logical operators
+        self.lexer.add('AND', r'and')
+        self.lexer.add('OR', r'or')
+        self.lexer.add('NOT', r'not')
         # Variables
         self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)
         # Parentheses
