@@ -5,9 +5,9 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'VARIABLE',
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'REPEAT', 'VARIABLE',
              'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
-             'LPAREN', 'RPAREN', '$end'],
+             'LPAREN', 'RPAREN', 'INDENT', 'NEWLINE', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['AND', 'OR']),
@@ -20,6 +20,10 @@ class Parser():
         )
     
     def parse(self):
+        @self.pg.production("statement : statement NEWLINE")
+        def statement_newline(state, p):
+            return p[0]
+        
         @self.pg.production("statement : OUTPUT expression")
         def statement_output(state, p):
             return Output(p[1])
@@ -28,15 +32,24 @@ class Parser():
         def statement_assignment(state, p):
             state.variables[p[0].getstr()] = p[2].eval()
             return p[2]
+
+        @self.pg.production("statement : REPEAT INTEGER")
+        def statement_repeat(state, p):
+            repeat_count = int(p[1].getstr())
+            if repeat_count > 0:
+                state.repeat_count = repeat_count
+            else:
+                raise AssertionError("You must repeat 1 or more times")
+            return EmptyLine()
         
         @self.pg.production("terminator : $end")
         @self.pg.production("statement : terminator")
-        @self.pg.production("statement : COMMENT")
+        @self.pg.production("statement : NEWLINE")
         # Ignore empty and commented lines
         def statement_empty(state, p):
             return EmptyLine()
         
-        @self.pg.production("statement : statement COMMENT")
+        @self.pg.production("statement : statement COMMENT NEWLINE")
         # Ignore comments after a line of code
         def statement_comment(state, p):
             return p[0]

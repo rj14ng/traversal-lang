@@ -1,3 +1,7 @@
+loop_i = 1
+repeat 3
+	output "Looping " + loop_i
+	loop_i = loop_i + 1
 // Test mathematical precedence
 output "##########################################"
 output "TESTING MATHEMATICAL PRECEDENCE"
@@ -85,3 +89,14 @@ output "##########################################"
 output "TESTING TEXT MULTIPLICATION"
 print 'W' + 'o' * 10 + 'w'  // Woooooooooow
 print 'A' + 10 * 'a' + 'h'  // Aaaaaaaaaaah
+
+// Test loops
+output "##########################################"
+output "TESTING LOOPS"
+loop_i = 1
+repeat 3
+	output "Looping " + loop_i
+	loop_i = loop_i + 1
+
+output "##########################################"
+output "End of file!"

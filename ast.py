@@ -2,6 +2,7 @@
 class ParserState(object):
     def __init__(self):
         self.variables = {}  # Hold a dict of declared variables
+        self.repeat_count = 0
 
 
 # Integers

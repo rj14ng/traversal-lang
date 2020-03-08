@@ -16,7 +16,7 @@ class Lexer():
         # Boolean AKA condition
         self.lexer.add('CONDITION', r'(?i)true(?!\w)|false(?!\w)')  # Case insensitive
         # Comments
-        self.lexer.add('COMMENT', r'//.*')  # Matches // and all following characters
+        self.lexer.ignore(r'//.*')  # Matches // and all following characters
         # Operators
         self.lexer.add('ADD', r'\+')
         self.lexer.add('SUB', r'-')
@@ -35,13 +35,19 @@ class Lexer():
         self.lexer.add('AND', r'and')
         self.lexer.add('OR', r'or')
         self.lexer.add('NOT', r'not')
+        # Loops
+        self.lexer.add('REPEAT', r'repeat(?!\w)')
         # Variables
         self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)
         # Parentheses
         self.lexer.add('LPAREN', r'\(')
         self.lexer.add('RPAREN', r'\)')
+        # Indents
+        self.lexer.add('INDENT', r'\t')
+        # Newlines
+        self.lexer.add('NEWLINE', r'\n')
         # Ignore all whitespace characters (remove newline in the future and make into separate token)
-        self.lexer.ignore(r'[ \n\t\r\f\v]+')
+        self.lexer.ignore(r'[ \r\f\v]+')
     
     def get_lexer(self):
         self._add_tokens()
