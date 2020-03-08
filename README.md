@@ -13,6 +13,7 @@ Test code should be placed in the `test.trv` file.
 
 ## Features
 - Dynamic typing
+- Loops
 
 ## Data types
 - Integers (`integer`)
@@ -25,6 +26,7 @@ Test code should be placed in the `test.trv` file.
 - Typical arithmetic operators `+`, `-`, `*`, `/` (only true division)
 - Print to stdout using `output` or `print`
 - Assignment operator using `=`
+- Loops indicated by `repeat` followed by the integer number of times to repeat (e.g. `repeat 3` loops over 3 times)
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
 - Logical operators are `and`, `or`, `not`
