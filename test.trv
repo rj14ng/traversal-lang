@@ -103,10 +103,13 @@ repeat 3
 	output "j=" + j + " k=" + k
 	k = k + 1
 
+l = 1
 repeat 2
 	repeat 3
 		repeat 4
-			output "boo"
+			repeat 5
+				output l
+				l = l + 1  // 120
 
 output "##########################################"
 output "End of file!"

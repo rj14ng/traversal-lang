@@ -83,7 +83,7 @@ def repeat(repeat_count, repeat_indent_level, input, state):
         if current_indent_level is None:
             current_indent_level = previous_indent_level
         
-        print(f"repeat function: line {idx + 1}, cur ind {current_indent_level}, prev ind {previous_indent_level}")
+        #print(f"repeat function: line {idx + 1}, cur ind {current_indent_level}, prev ind {previous_indent_level}")
         #print(repeat_code_block)
         
         if current_indent_level > repeat_indent_level:
@@ -92,58 +92,61 @@ def repeat(repeat_count, repeat_indent_level, input, state):
             # By removing only the first token, code indented once can be run by parse() as if the indent level was 0
             # Code indented more than once is expected to be in a REPEAT loop, so the function is then recursively called again to parse nested loops
             repeat_code_block.append(line.replace('\t', '', 1))
-            print(repeat_code_block)
+            #print(repeat_code_block)
         else:
-            #print("PARSING REPEAT BLOCK")
+            #print(f"PARSING REPEAT BLOCK: {repeat_code_block}")
             for i in range(repeat_count):
                 parse(repeat_code_block, state)
-            break
+            return len(repeat_code_block)
             #return idx
         
         previous_indent_level = current_indent_level
     
-    print(f"return {len(repeat_code_block)}")
+    #print(f"REACHED END, PARSING REPEAT BLOCK: {repeat_code_block}")
+    for i in range(repeat_count):
+        parse(repeat_code_block, state)
+    #print(f"return {len(repeat_code_block)}")
     return len(repeat_code_block)
 
-def repeat2(input, state):
-    repeat_code_block = []
+# def repeat2(input, state):
+#     repeat_code_block = []
 
-    tokens = lexer.lex(input[0])
-    repeat_count = find_repeat_count(copy(tokens))
-    repeat_indent_level = find_indent_level(copy(tokens))
+#     tokens = lexer.lex(input[0])
+#     repeat_count = find_repeat_count(copy(tokens))
+#     repeat_indent_level = find_indent_level(copy(tokens))
 
-    previous_indent_level = repeat_indent_level
-    current_indent_level = 0
-    for idx, line in enumerate(input[1:]):
-        #print(f"repeat input: {input}")
-        tokens = lexer.lex(line)
-        current_indent_level = find_indent_level(copy(tokens))
+#     previous_indent_level = repeat_indent_level
+#     current_indent_level = 0
+#     for idx, line in enumerate(input[1:]):
+#         #print(f"repeat input: {input}")
+#         tokens = lexer.lex(line)
+#         current_indent_level = find_indent_level(copy(tokens))
 
-        # If the current line is empty, let current indent level be equal to the previous indent level
-        if current_indent_level is None:
-            current_indent_level = previous_indent_level
+#         # If the current line is empty, let current indent level be equal to the previous indent level
+#         if current_indent_level is None:
+#             current_indent_level = previous_indent_level
         
-        print(f"repeat function: line {idx + 1}, cur ind {current_indent_level}, prev ind {previous_indent_level}")
-        #print(repeat_code_block)
+#         print(f"repeat function: line {idx + 1}, cur ind {current_indent_level}, prev ind {previous_indent_level}")
+#         #print(repeat_code_block)
         
-        if current_indent_level > repeat_indent_level:
-            #print("CUR IND >= REPEAT IND")
-            # Remove first preceding \t INDENT token and append to repeat block
-            # By removing only the first token, code indented once can be run by parse() as if the indent level was 0
-            # Code indented more than once is expected to be in a REPEAT loop, so the function is then recursively called again to parse nested loops
-            repeat_code_block.append(line.replace('\t', '', 1))
-            print(repeat_code_block)
-        else:
-            #print("PARSING REPEAT BLOCK")
-            for i in range(repeat_count):
-                parse(repeat_code_block, state)
-            break
-            #return idx
+#         if current_indent_level > repeat_indent_level:
+#             #print("CUR IND >= REPEAT IND")
+#             # Remove first preceding \t INDENT token and append to repeat block
+#             # By removing only the first token, code indented once can be run by parse() as if the indent level was 0
+#             # Code indented more than once is expected to be in a REPEAT loop, so the function is then recursively called again to parse nested loops
+#             repeat_code_block.append(line.replace('\t', '', 1))
+#             print(repeat_code_block)
+#         else:
+#             #print("PARSING REPEAT BLOCK")
+#             for i in range(repeat_count):
+#                 parse(repeat_code_block, state)
+#             break
+#             #return idx
         
-        previous_indent_level = current_indent_level
+#         previous_indent_level = current_indent_level
     
-    print(f"return {len(repeat_code_block)-1}")
-    return len(repeat_code_block) - 1
+#     print(f"return {len(repeat_code_block)-1}")
+#     return len(repeat_code_block) - 1
 
 def parse(input, state):
     '''
@@ -197,7 +200,7 @@ def parse(input, state):
         #         pass
 
         if lines_skipped > 0:
-            print(f"skipping lines {lines_skipped}")
+            #print(f"skipping lines {lines_skipped}")
             lines_skipped -= 1
             continue
         
