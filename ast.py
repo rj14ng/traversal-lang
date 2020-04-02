@@ -2,7 +2,7 @@
 class ParserState(object):
     def __init__(self):
         self.variables = {}  # Hold a dict of declared variables
-        self.repeat_count = 0
+        self.repeat_stack = []
 
 
 # Integers
@@ -372,7 +372,17 @@ class Variable():
     def eval(self):
         return self.value.eval()
 
+
 # Empty line
 class EmptyLine():
     def eval(self):
         return None
+
+
+# Repeat
+class Repeat():
+    def __init__(self, repeat_count):
+        self.repeat_count = repeat_count
+    
+    def eval(self):
+        return self.repeat_count

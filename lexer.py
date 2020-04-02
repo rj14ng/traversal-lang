@@ -46,7 +46,7 @@ class Lexer():
         self.lexer.add('INDENT', r'\t')
         # Newlines
         self.lexer.add('NEWLINE', r'\n')
-        # Ignore all whitespace characters (remove newline in the future and make into separate token)
+        # Ignore all other whitespace characters
         self.lexer.ignore(r'[ \r\f\v]+')
     
     def get_lexer(self):

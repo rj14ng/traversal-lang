@@ -1,8 +1,3 @@
-loop_i = 1
-repeat 3
-	output "Looping " + loop_i
-	loop_i = loop_i + 1
-// Test mathematical precedence
 output "##########################################"
 output "TESTING MATHEMATICAL PRECEDENCE"
 print 17 + 3 * 8 / 6  // 21.0
@@ -93,10 +88,25 @@ print 'A' + 10 * 'a' + 'h'  // Aaaaaaaaaaah
 // Test loops
 output "##########################################"
 output "TESTING LOOPS"
-loop_i = 1
+i = 1
+repeat 2
+	output "Looping " + i
+	output i + " * 2 = " + i * 2
+	i = i + 1
+
+j = 1
+k = 1
 repeat 3
-	output "Looping " + loop_i
-	loop_i = loop_i + 1
+	repeat 3
+		output "j=" + j + " k=" + k
+		j = j + 1
+	output "j=" + j + " k=" + k
+	k = k + 1
+
+repeat 2
+	repeat 3
+		repeat 4
+			output "boo"
 
 output "##########################################"
 output "End of file!"

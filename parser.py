@@ -37,10 +37,15 @@ class Parser():
         def statement_repeat(state, p):
             repeat_count = int(p[1].getstr())
             if repeat_count > 0:
-                state.repeat_count = repeat_count
+                state.repeat_stack.append(repeat_count)
             else:
                 raise AssertionError("You must repeat 1 or more times")
-            return EmptyLine()
+            #return EmptyLine()
+            return Repeat(repeat_count)
+        
+        # @self.pg.production("statement : INDENT statement")
+        # def statement_indent(state, p):
+        #     return p[1]
         
         @self.pg.production("terminator : $end")
         @self.pg.production("statement : terminator")
