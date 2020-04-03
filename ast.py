@@ -373,16 +373,7 @@ class Variable():
         return self.value.eval()
 
 
-# Empty line
-class EmptyLine():
+# Do nothing
+class DoNothing():
     def eval(self):
         return None
-
-
-# Repeat
-class Repeat():
-    def __init__(self, repeat_count):
-        self.repeat_count = repeat_count
-    
-    def eval(self):
-        return self.repeat_count

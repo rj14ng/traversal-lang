@@ -85,9 +85,9 @@ output "TESTING TEXT MULTIPLICATION"
 print 'W' + 'o' * 10 + 'w'  // Woooooooooow
 print 'A' + 10 * 'a' + 'h'  // Aaaaaaaaaaah
 
-// Test loops
+// Test repeat loops
 output "##########################################"
-output "TESTING LOOPS"
+output "TESTING REPEAT LOOPS"
 
 i = 1
 repeat 2
@@ -107,6 +107,22 @@ repeat 2
 		k = k + 1
 	output "j=" + j + " k=" + k + " l=" + l
 	l = l + 1
+
+// Test repeat until loops
+output "##########################################"
+output "TESTING REPEAT UNTIL LOOPS"
+m = 1
+n = 1
+o = 1
+repeat until m > 2
+	repeat until n > 3
+		repeat until o > 4
+			output "m=" + m + " n=" + n + " o=" + o
+			o = o + 1
+		output "m=" + m + " n=" + n + " o=" + o
+		n = n + 1
+	output "m=" + m + " n=" + n + " o=" + o
+	m = m + 1
 
 output "##########################################"
 output "End of file!"

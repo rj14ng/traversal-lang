@@ -36,6 +36,7 @@ class Lexer():
         self.lexer.add('OR', r'or')
         self.lexer.add('NOT', r'not')
         # Loops
+        self.lexer.add('REPEATUNTIL', r'repeat until(?!\w)')
         self.lexer.add('REPEAT', r'repeat(?!\w)')
         # Variables
         self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)

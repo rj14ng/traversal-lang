@@ -6,7 +6,7 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
             # INDENT not added as it's not actually used within RPLY's native parser functions
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEAT', 'VARIABLE',
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEATUNTIL', 'REPEAT', 'VARIABLE',
              'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
              'LPAREN', 'RPAREN', 'NEWLINE', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
@@ -33,26 +33,26 @@ class Parser():
             state.variables[p[0].getstr()] = p[2].eval()
             return p[2]
 
+        @self.pg.production("statement : REPEATUNTIL expression")
+        def statement_repeat_until(state, p):
+            expr = p[1].eval()
+            if type(expr) is not Condition:
+                raise AssertionError("You must follow 'repeat until' with a condition")
+            return expr
+
         @self.pg.production("statement : REPEAT INTEGER")
         def statement_repeat(state, p):
             repeat_count = int(p[1].getstr())
-            if repeat_count > 0:
-                state.repeat_stack.append(repeat_count)
-            else:
+            if repeat_count <= 0:
                 raise AssertionError("You must repeat 1 or more times")
-            #return EmptyLine()
-            return Repeat(repeat_count)
-        
-        # @self.pg.production("statement : INDENT statement")
-        # def statement_indent(state, p):
-        #     return p[1]
+            return DoNothing()
         
         @self.pg.production("terminator : $end")
         @self.pg.production("statement : terminator")
         @self.pg.production("statement : NEWLINE")
         # Ignore empty and commented lines
         def statement_empty(state, p):
-            return EmptyLine()
+            return DoNothing()
         
         @self.pg.production("expression : LPAREN expression RPAREN")
         def expression_paren(state, p):
