@@ -13,7 +13,9 @@ Test code should be placed in the `test.trv` file.
 
 ## Features
 - Dynamic typing
+- Basic data types
 - Loops
+- Rudimentary string concatenation and 'multiplication'
 
 ## Data types
 - Integers (`integer`)
@@ -30,6 +32,9 @@ Test code should be placed in the `test.trv` file.
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
 - Logical operators are `and`, `or`, `not`
-- String multiplication by integers (just like Python!)
+- Loops
+  - `repeat` to loop for an integer number of items (e.g. `repeat 3`)
+  - `repeat until` to loop until a condition is satisfied (e.g. `repeat until x > 10`)
 - String concatenation can be done with any data type
+- String multiplication by integers (just like Python!)
 - Booleans are not integers
