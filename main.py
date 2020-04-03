@@ -42,28 +42,6 @@ def find_indent_level(tokens):
         return None
 
 
-# def find_repeat_count(tokens, state):
-#     '''
-#     Returns the number of repeats as specified by a REPEAT token.
-
-#     Args:
-#         tokens (rply.lexer.LexerStream): LexerStream object containing a line of lexed tokens. This should be a *copy* of the original object, as tokens are discarded once read.
-
-#     Returns:
-#     (int): Repeat count. Returns 0 if REPEAT token not detected.
-
-#     '''
-#     if next_token_type_is(copy(tokens), "REPEAT"):
-#         try:
-#             result = parser.parse(tokens, state=state)
-#         except:
-#             print("boo")
-#             raise
-#         print(result)
-#         return result
-#     return 0
-
-
 def repeat(repeat_count, repeat_indent_level, input, start_lineno, state):
     '''
     Performs a REPEAT loop for the parse() function.
@@ -192,8 +170,7 @@ def parse(input, start_lineno, state):
             lines_skipped -= 1
             continue
         
-        # repeat_count = find_repeat_count(copy(tokens), state)
-
+        # REPEAT statement found
         if next_token_type_is(copy(tokens), "REPEAT"):
             try:
                 repeat_count = parser.parse(tokens, state=state)  # Don't .eval() as this returns an int?
@@ -201,10 +178,6 @@ def parse(input, start_lineno, state):
                 print(f"On line {lineno}:", end=' ')
                 raise
             lines_skipped = repeat(repeat_count, current_indent_level, input[idx+1:], lineno + 1, state)
-
-        # # REPEAT statement found
-        # if repeat_count:
-        #     lines_skipped = repeat(repeat_count, current_indent_level, input[idx+1:], lineno + 1, state)
         # REPEATUNTIL statement found
         elif next_token_type_is(copy(tokens), "REPEATUNTIL"):
             try:
@@ -212,7 +185,7 @@ def parse(input, start_lineno, state):
             except:
                 print(f"On line {lineno}:", end=' ')
                 raise
-            lines_skipped = repeatuntil(current_indent_level, input[idx:], lineno, state)
+            lines_skipped = repeatuntil(current_indent_level, input[idx:], lineno + 1, state)
         # Normal statement parsed using RPLY's native parser
         else:
             try:
