@@ -88,6 +88,7 @@ print 'A' + 10 * 'a' + 'h'  // Aaaaaaaaaaah
 // Test loops
 output "##########################################"
 output "TESTING LOOPS"
+
 i = 1
 repeat 2
 	output "Looping " + i
@@ -96,20 +97,16 @@ repeat 2
 
 j = 1
 k = 1
-repeat 3
-	repeat 3
-		output "j=" + j + " k=" + k
-		j = j + 1
-	output "j=" + j + " k=" + k
-	k = k + 1
-
 l = 1
 repeat 2
 	repeat 3
 		repeat 4
-			repeat 5
-				output l
-				l = l + 1  // 120
+			output "j=" + j + " k=" + k + " l=" + l
+			j = j + 1
+		output "j=" + j + " k=" + k + " l=" + l
+		k = k + 1
+	output "j=" + j + " k=" + k + " l=" + l
+	l = l + 1
 
 output "##########################################"
 output "End of file!"
