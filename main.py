@@ -42,23 +42,29 @@ def find_indent_level(tokens):
         return None
 
 
-def find_repeat_count(tokens):
-    '''
-    Returns the number of repeats as specified by a REPEAT token.
+# def find_repeat_count(tokens, state):
+#     '''
+#     Returns the number of repeats as specified by a REPEAT token.
 
-    Args:
-        tokens (rply.lexer.LexerStream): LexerStream object containing a line of lexed tokens. This should be a *copy* of the original object, as tokens are discarded once read.
+#     Args:
+#         tokens (rply.lexer.LexerStream): LexerStream object containing a line of lexed tokens. This should be a *copy* of the original object, as tokens are discarded once read.
 
-    Returns:
-    (int): Repeat count. Returns 0 if REPEAT token not detected.
+#     Returns:
+#     (int): Repeat count. Returns 0 if REPEAT token not detected.
 
-    '''
-    if next_token_type_is(tokens, "REPEAT"):
-        return int(next(tokens).getstr())
-    return 0
+#     '''
+#     if next_token_type_is(copy(tokens), "REPEAT"):
+#         try:
+#             result = parser.parse(tokens, state=state)
+#         except:
+#             print("boo")
+#             raise
+#         print(result)
+#         return result
+#     return 0
 
 
-def repeat(repeat_count, repeat_indent_level, input, state):
+def repeat(repeat_count, repeat_indent_level, input, start_lineno, state):
     '''
     Performs a REPEAT loop for the parse() function.
 
@@ -90,7 +96,7 @@ def repeat(repeat_count, repeat_indent_level, input, state):
         else:
             # Perform loop once current indent level returns to the REPEAT statement's indent level
             for i in range(repeat_count):
-                parse(repeat_code_block, state)
+                parse(repeat_code_block, start_lineno, state)
             
             return len(repeat_code_block)
         
@@ -99,12 +105,12 @@ def repeat(repeat_count, repeat_indent_level, input, state):
     # Perform loop if the repeat code block ends up being the same as the input
     # This occurs for deeply nested loops
     for i in range(repeat_count):
-        parse(repeat_code_block, state)
+        parse(repeat_code_block, start_lineno, state)
 
     return len(repeat_code_block)
 
 
-def repeatuntil(repeat_indent_level, input, state):
+def repeatuntil(repeat_indent_level, input, start_lineno, state):
     '''
     Performs a REPEATUNTIL loop for the parse() function.
 
@@ -142,7 +148,7 @@ def repeatuntil(repeat_indent_level, input, state):
 
             # Perform loop once current indent level returns to the REPEAT statement's indent level
             while not repeatuntil_condition.value:
-                parse(repeat_code_block, state)
+                parse(repeat_code_block, start_lineno, state)
                 repeatuntil_condition = parser.parse(copy(repeatuntil_tokens), state=state).eval()
             
             return len(repeat_code_block)
@@ -154,13 +160,13 @@ def repeatuntil(repeat_indent_level, input, state):
     repeatuntil_condition = parser.parse(copy(repeatuntil_tokens), state=state).eval()
 
     while not repeatuntil_condition:
-        parse(repeat_code_block, state)
+        parse(repeat_code_block, start_lineno, state)
         repeatuntil_condition = parser.parse(copy(repeatuntil_tokens), state=state).eval()
     
     return len(repeat_code_block)
 
 
-def parse(input, state):
+def parse(input, start_lineno, state):
     '''
     Parse input from an array of strings.
 
@@ -175,7 +181,7 @@ def parse(input, state):
 
     for idx, line in enumerate(input):
         tokens = lexer.lex(line)
-
+        lineno = idx + start_lineno
         current_indent_level = find_indent_level(copy(tokens))
 
         # If the current line is empty, let current indent level be equal to the previous indent level
@@ -186,17 +192,34 @@ def parse(input, state):
             lines_skipped -= 1
             continue
         
-        repeat_count = find_repeat_count(copy(tokens))
+        # repeat_count = find_repeat_count(copy(tokens), state)
 
-        # REPEAT statement found
-        if repeat_count:
-            lines_skipped = repeat(repeat_count, current_indent_level, input[idx+1:], state)
+        if next_token_type_is(copy(tokens), "REPEAT"):
+            try:
+                repeat_count = parser.parse(tokens, state=state)  # Don't .eval() as this returns an int?
+            except:
+                print(f"On line {lineno}:", end=' ')
+                raise
+            lines_skipped = repeat(repeat_count, current_indent_level, input[idx+1:], lineno + 1, state)
+
+        # # REPEAT statement found
+        # if repeat_count:
+        #     lines_skipped = repeat(repeat_count, current_indent_level, input[idx+1:], lineno + 1, state)
         # REPEATUNTIL statement found
         elif next_token_type_is(copy(tokens), "REPEATUNTIL"):
-            lines_skipped = repeatuntil(current_indent_level, input[idx:], state)
+            try:
+                repeat_count = parser.parse(tokens, state=state)
+            except:
+                print(f"On line {lineno}:", end=' ')
+                raise
+            lines_skipped = repeatuntil(current_indent_level, input[idx:], lineno, state)
         # Normal statement parsed using RPLY's native parser
         else:
-            parser.parse(tokens, state=state).eval()
+            try:
+                parser.parse(tokens, state=state).eval()
+            except:
+                print(f"On line {lineno}:", end=' ')
+                raise
         
         previous_indent_level = current_indent_level
 
@@ -219,4 +242,4 @@ if __name__ == "__main__":
     # Open and parse test.trv file
     with open("test.trv", 'r') as test_input:
         state = ParserState()
-        parse(test_input.readlines(), state)
+        parse(test_input.readlines(), 1, state)

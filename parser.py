@@ -40,12 +40,16 @@ class Parser():
                 raise AssertionError("You must follow 'repeat until' with a condition")
             return expr
 
-        @self.pg.production("statement : REPEAT INTEGER")
+        @self.pg.production("statement : REPEAT expression")
         def statement_repeat(state, p):
-            repeat_count = int(p[1].getstr())
+            expr = p[1].eval()
+            if type(expr) is not Integer:
+                raise AssertionError("You must follow 'repeat' with an integer")
+
+            repeat_count = expr.value
             if repeat_count <= 0:
                 raise AssertionError("You must repeat 1 or more times")
-            return DoNothing()
+            return repeat_count
         
         @self.pg.production("terminator : $end")
         @self.pg.production("statement : terminator")
