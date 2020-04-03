@@ -5,9 +5,10 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'COMMENT', 'REPEAT', 'VARIABLE',
+            # INDENT not added as it's not actually used within RPLY's native parser functions
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEAT', 'VARIABLE',
              'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
-             'LPAREN', 'RPAREN', 'INDENT', 'NEWLINE', '$end'],
+             'LPAREN', 'RPAREN', 'NEWLINE', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
                 ('left', ['AND', 'OR']),
@@ -15,7 +16,6 @@ class Parser():
                 ('left', ['=', 'NOT=', '<=', '<', '>=', '>']),
                 ('left', ['ADD', 'SUB']),
                 ('left', ['MUL', 'DIV']),
-                ('left', ['COMMENT'])  # Add comments to precedence list to avoid shift/reduce conflict, but not sure *where* it actually should be
             ]
         )
     
@@ -53,11 +53,6 @@ class Parser():
         # Ignore empty and commented lines
         def statement_empty(state, p):
             return EmptyLine()
-        
-        @self.pg.production("statement : statement COMMENT NEWLINE")
-        # Ignore comments after a line of code
-        def statement_comment(state, p):
-            return p[0]
         
         @self.pg.production("expression : LPAREN expression RPAREN")
         def expression_paren(state, p):
