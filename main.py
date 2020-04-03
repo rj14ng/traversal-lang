@@ -50,6 +50,7 @@ def repeat(repeat_count, repeat_indent_level, input, start_lineno, state):
         repeat_count (int): Number of times to repeat the code block.
         repeat_indent_level (int): The indent level of the preceding REPEAT statement.
         input (list): Sliced array passed from parse(), containing the lines of code after the REPEAT line.
+        start_lineno(int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     
     Returns:
@@ -95,6 +96,7 @@ def repeatuntil(repeat_indent_level, input, start_lineno, state):
     Args:
         repeat_indent_level (int): The indent level of the preceding REPEAT statement.
         input (list): Sliced array passed from parse(), containing the lines of code including and after the REPEAT line.
+        start_lineno(int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     
     Returns:
@@ -150,6 +152,7 @@ def parse(input, start_lineno, state):
 
     Args:
         input (list): Array containing each line of code input.
+        start_lineno(int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     '''
     repeat_count = 0
