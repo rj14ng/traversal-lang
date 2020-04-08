@@ -124,5 +124,21 @@ repeat until m > 2
 	output "m=" + m + " n=" + n + " o=" + o
 	m = m + 1
 
+// Test if, else if, else conditional statements
+output "##########################################"
+output "TESTING CONDITIONAL STATEMENTS"
+if o > 1
+	output "o greater than 1"
+	print "good"
+else if o < 1
+	output "o less than 1"
+	print "good"
+else if o <= 1  // random addition just to check if multiple ELSEIFs work
+	output "lol tf"
+	print "good"
+else
+	output "o equal to 1"
+	print "good"
+
 output "##########################################"
 output "End of file!"

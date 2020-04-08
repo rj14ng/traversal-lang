@@ -131,7 +131,71 @@ def repeatuntil(repeat_indent_level, input, start_lineno, state):
 
 
 def if_elseif_else(if_indent_level, input, start_lineno, state):
-    pass
+    # Keep track of number of condition statements to calculate how many lines to skip later on
+    conditional_statements_length = 1  # Already found one 'if' statement
+
+    # Setting up storage of 'if' and 'else' information
+    if_code_block = []
+    else_code_block = []
+
+    # Setting up storage of 'else if' information (there may be multiple 'else if' blocks)
+    elseif_pos = []  # Array of all pointers for 'else if' statements
+    elseif_tokens = []  # 2D array of all 'else if' statement tokens
+    elseif_code_blocks = []  # 2D array of all 'else if' code blocks
+
+    # Storing 'if' information
+    if_pos = 0
+    if_tokens = lexer.lex(input[if_pos])
+    if_code_block = get_indent_block(if_indent_level, input[if_pos+1:], state)
+
+    next_pos = if_pos + len(if_code_block) + 1  # Next pointer for a conditional statement (either 'else if' or 'else' statement)
+    next_tokens = lexer.lex(input[next_pos])
+    
+    # Have to check for potentially multiple 'else if' statements
+    is_elseif = next_token_type_is(copy(next_tokens), "ELSEIF")
+    if is_elseif:
+        while is_elseif:
+            conditional_statements_length += 1
+
+            # Storing first 'else if' information
+            elseif_pos.append(next_pos)
+            elseif_tokens.append(next_tokens)
+            indent_code_block = get_indent_block(if_indent_level, input[next_pos+1:], state)
+            elseif_code_blocks.append(indent_code_block)
+
+            next_pos = next_pos + len(indent_code_block) + 1
+            next_tokens = lexer.lex(input[next_pos])
+
+            is_elseif = next_token_type_is(copy(next_tokens), "ELSEIF")
+
+    # Check for 'else' statement
+    if next_token_type_is(copy(next_tokens), "ELSE"):
+        conditional_statements_length += 1
+
+        # Storing 'else' information
+        else_pos, else_tokens = next_pos, next_tokens
+        else_code_block = get_indent_block(if_indent_level, input[else_pos+1:], state)
+
+        next_pos = else_pos + len(else_code_block) + 1
+        next_tokens = lexer.lex(input[next_pos])
+    
+    # Check for illegal follow-up of 'else if' or 'else' after an 'else' statement
+    if next_token_type_is(copy(next_tokens), "ELSEIF") or next_token_type_is(copy(next_tokens), "ELSE"):
+        print(f"On line {start_lineno + next_pos}:", end=' ')
+        raise AssertionError("You cannot follow 'else' with another 'else' or 'else if' statement")
+    
+    # DEBUG
+    print(input[if_pos], if_code_block)
+    for i in range(len(elseif_pos)):
+        print(input[elseif_pos[i]], elseif_code_blocks[i])
+    try:
+        print(input[else_pos], else_code_block)  # there may not be an else
+    except:
+        pass
+
+    code_block_length = len(if_code_block) + sum(len(block) for block in elseif_code_blocks) + len(else_code_block)
+    lines_skipped = code_block_length + conditional_statements_length - 1
+    return lines_skipped
 
 
 def parse(input, start_lineno, state):
@@ -177,6 +241,14 @@ def parse(input, start_lineno, state):
                 print(f"On line {lineno}:", end=' ')
                 raise
             lines_skipped = repeatuntil(current_indent_level, input[idx:], lineno + 1, state)
+        # IF statement found
+        elif next_token_type_is(copy(tokens), "IF"):
+            try:
+                parser.parse(tokens, state=state).eval()
+            except:
+                print(f"On line {lineno}:", end=' ')
+                raise
+            lines_skipped = if_elseif_else(current_indent_level, input[idx:], lineno + 1, state)
         # Normal statement parsed using RPLY's native parser
         else:
             try:
@@ -190,7 +262,7 @@ def parse(input, start_lineno, state):
 
 if __name__ == "__main__":
     # Remove Python traceback to hide 'scary' error messages
-    sys.tracebacklimit = 0
+    #sys.tracebacklimit = 0
 
     # Parser state
     state = ParserState()
