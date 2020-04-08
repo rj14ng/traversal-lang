@@ -6,7 +6,7 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser
             # INDENT not added as it's not actually used within RPLY's native parser functions
-            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEATUNTIL', 'REPEAT', 'VARIABLE',
+            ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEATUNTIL', 'REPEAT', 'IF', 'ELSE IF', 'ELSE', 'VARIABLE',
              'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
              'LPAREN', 'RPAREN', 'NEWLINE', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
@@ -32,6 +32,15 @@ class Parser():
         def statement_assignment(state, p):
             state.variables[p[0].getstr()] = p[2].eval()
             return p[2]
+        
+        @self.pg.production("statement : IF expression")
+        @self.pg.production("statement : ELSE IF expression")
+        @self.pg.production("statement : ELSE expression")
+        def statement_conditionals(state, p):
+            expr = p[1].eval()
+            if type(expr) is not Condition:
+                raise AssertionError("You must follow 'if', 'else if', and/or 'else' with a condition")
+            return expr
 
         @self.pg.production("statement : REPEATUNTIL expression")
         def statement_repeat_until(state, p):
