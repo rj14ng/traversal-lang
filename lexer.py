@@ -40,7 +40,7 @@ class Lexer():
         self.lexer.add('REPEAT', r'repeat(?!\w)')
         # Conditional statements
         self.lexer.add('IF', r'if(?!\w)')
-        self.lexer.add('ELSE IF', r'else if(?!\w)')
+        self.lexer.add('ELSEIF', r'else if(?!\w)')
         self.lexer.add('ELSE', r'else(?!\w)')
         # Variables
         self.lexer.add('VARIABLE', '[a-zA-Z_][a-zA-Z0-9_]*')  # (Precedence - put all keywords before variable names which would otherwise match)
