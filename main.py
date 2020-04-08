@@ -130,6 +130,10 @@ def repeatuntil(repeat_indent_level, input, start_lineno, state):
     return len(repeat_code_block)
 
 
+def if_elseif_else(if_indent_level, input, start_lineno, state):
+    pass
+
+
 def parse(input, start_lineno, state):
     '''
     Parse input from an array of strings.
@@ -139,7 +143,7 @@ def parse(input, start_lineno, state):
         start_lineno(int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     '''
-    repeat_count = 0
+    repeat_count = 0  # For REPEAT statements
     previous_indent_level = 0
     current_indent_level = 0
     lines_skipped = 0
@@ -168,7 +172,7 @@ def parse(input, start_lineno, state):
         # REPEATUNTIL statement found
         elif next_token_type_is(copy(tokens), "REPEATUNTIL"):
             try:
-                repeat_count = parser.parse(tokens, state=state)
+                parser.parse(tokens, state=state).eval()
             except:
                 print(f"On line {lineno}:", end=' ')
                 raise
