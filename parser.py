@@ -39,7 +39,7 @@ class Parser():
         def statement_if_elseif(state, p):
             expr = p[1].eval()
             if type(expr) is not Condition:
-                raise AssertionError("You must follow 'if', 'else if', and/or 'else' with a condition")
+                raise SyntaxError("You must follow 'if', 'else if', and/or 'else' with a condition")
             return expr
         
         @self.pg.production("statement : ELSE")
@@ -50,18 +50,18 @@ class Parser():
         def statement_repeat_until(state, p):
             expr = p[1].eval()
             if type(expr) is not Condition:
-                raise AssertionError("You must follow 'repeat until' with a condition")
+                raise SyntaxError("You must follow 'repeat until' with a condition")
             return expr
 
         @self.pg.production("statement : REPEAT expression")
         def statement_repeat(state, p):
             expr = p[1].eval()
             if type(expr) is not Integer:
-                raise AssertionError("You must follow 'repeat' with an integer")
+                raise SyntaxError("You must follow 'repeat' with an integer")
 
             repeat_count = expr.value
             if repeat_count <= 0:
-                raise AssertionError("You must repeat 1 or more times")
+                raise SyntaxError("You must repeat 1 or more times")
             return repeat_count
         
         @self.pg.production("terminator : $end")

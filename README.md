@@ -1,4 +1,6 @@
 # Traversal
+[![Python version](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+
 Repository for Rocco Jiang's Extended Project Qualification. Traversal is a simple text-based programming language specifically aimed at teaching young students basic programming concepts, with an intention to bridge the gap between visual block-based languages (e.g. Scratch) and text-based languages (e.g. Python).
 
 ## Requirements
@@ -7,9 +9,13 @@ The parser requires RPly.
 Install using `pip3 install rply`.
 
 ## Guide
-To run: `python3 main.py`.
+Traversal comes with a `test.trv` file by default, which is run if no other files are provided:
 
-Test code should be placed in the `test.trv` file.
+`python3 main.py`
+
+A file can be provided and run using:
+
+`python3 main.py filename.trv`
 
 ## Features
 - Dynamic typing

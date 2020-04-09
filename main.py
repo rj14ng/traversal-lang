@@ -203,7 +203,7 @@ def if_elseif_else(if_indent_level, input, start_lineno, state):
     # Check for illegal follow-up of 'else if' or 'else' after an 'else' statement
     if next_token_type_is(copy(next_tokens), "ELSEIF") or next_token_type_is(copy(next_tokens), "ELSE"):
         print(f"On line {start_lineno + next_pos}:", end=' ')
-        raise AssertionError("You cannot follow 'else' with another 'else' or 'else if' statement")
+        raise SyntaxError("You cannot follow 'else' with another 'else' or 'else if' statement")
 
     return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens, elseif_code_blocks, else_code_block)
 
@@ -315,7 +315,7 @@ def parse(input, start_lineno, state):
 
 if __name__ == "__main__":
     # Remove Python traceback to hide 'scary' error messages
-    #sys.tracebacklimit = 0
+    sys.tracebacklimit = 0
 
     # Parser state
     state = ParserState()
@@ -328,7 +328,16 @@ if __name__ == "__main__":
     pg.parse()
     parser = pg.get_parser()
 
-    # Open and parse test.trv file
-    with open("test.trv", 'r') as test_input:
-        state = ParserState()
-        parse(test_input.readlines(), 1, state)
+    # Open and parse test.trv file by default
+    if len(sys.argv) == 1:
+        with open("test.trv", 'r') as test_input:
+            state = ParserState()
+            parse(test_input.readlines(), 1, state)
+    # Open and parse user-defined file
+    elif len(sys.argv) == 2:
+        trv_file = sys.argv[1]
+        with open(trv_file, 'r') as user_input:
+            state = ParserState()
+            parse(user_input.readlines(), 1, state)
+    else:
+        raise OSError("Too many command-line arguments!")
