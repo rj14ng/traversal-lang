@@ -90,7 +90,7 @@ def repeat(repeat_count, repeat_indent_level, input, start_lineno, state):
         repeat_count (int): Number of times to repeat the code block.
         repeat_indent_level (int): The indent level of the preceding REPEAT statement.
         input (list): Sliced array passed from parse(), containing the lines of code after the REPEAT line.
-        start_lineno(int): Line number of the first line passed to the function, for error messages.
+        start_lineno (int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     
     Returns:
@@ -111,7 +111,7 @@ def repeatuntil(repeat_indent_level, input, start_lineno, state):
     Args:
         repeat_indent_level (int): The indent level of the preceding REPEAT statement.
         input (list): Sliced array passed from parse(), containing the lines of code including and after the REPEAT line.
-        start_lineno(int): Line number of the first line passed to the function, for error messages.
+        start_lineno (int): Line number of the first line passed to the function, for error messages.
         state (ast.ParserState): Parser state.
     
     Returns:
@@ -131,6 +131,18 @@ def repeatuntil(repeat_indent_level, input, start_lineno, state):
 
 
 def if_elseif_else(if_indent_level, input, start_lineno, state):
+    '''
+    Store IF...ELSE IF... ELSE conditional statements before passing to the parse_if_elseif_else() function.
+
+    Args:
+        if_indent_level (int): The indent level of the preceding IF statement (and thus ELSE IF and ELSE statements)
+        input (list): Sliced array passed from parse(), containing the lines of code including and after the IF line.
+        start_lineno (int): Line number of the first line passed to the function, for error messages.
+        state (ast.ParserState): Parser state.
+    
+    Returns:
+        (int): Number of lines within the if... else if... else block, which parse() will have to skip. Returned from calling parse_if_eliseif_else().
+    '''
     # Keep track of number of condition statements to calculate how many lines to skip later on
     conditional_statements_length = 1  # Already found one 'if' statement
 
@@ -192,36 +204,46 @@ def if_elseif_else(if_indent_level, input, start_lineno, state):
     if next_token_type_is(copy(next_tokens), "ELSEIF") or next_token_type_is(copy(next_tokens), "ELSE"):
         print(f"On line {start_lineno + next_pos}:", end=' ')
         raise AssertionError("You cannot follow 'else' with another 'else' or 'else if' statement")
-    
-    # # DEBUG
-    # print(input[if_pos], if_code_block)
-    # for i in range(len(elseif_pos)):
-    #     print(input[elseif_pos[i]], elseif_code_blocks[i])
-    # try:
-    #     print(input[else_pos], else_code_block)  # there may not be an else
-    # except:
-    #     pass
 
     return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens, elseif_code_blocks, else_code_block)
 
 
 def parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens=[], elseif_code_blocks=[], else_code_block=[]):
+    '''
+    Parse IF...ELSE IF... ELSE conditional statements. Called from the if_elseif_else() function.
+
+    Args:
+        start_lineno (int): Line number of the first line passed to the function, for error messages.
+        state (ast.ParserState): Parser state.
+        conditional_statements_length (int): Number of conditional statements to add to the number of lines skipped.
+        if_tokens (rply.lexer.LexerStream): Tokenised IF statement line.
+        if_code_block (list): Code block following the IF statement.
+        elseif_tokens (list[rply.lexer.LexerStream]): List of tokenised ELSE IF statement lines. Empty by default.
+        elseif_code_blocks (list[list]): List of code blocks following each ELSE IF statement. Empty by default.
+        else_code_block (list): Code block following the ELSE statement. Empty by default.
+   
+    Returns:
+        (int): Number of lines within the if... else if... else block, which parse() will have to skip.
+    '''
     # Calculate lines needed to be skipped
     code_block_length = len(if_code_block) + sum(len(block) for block in elseif_code_blocks) + len(else_code_block)
     lines_skipped = code_block_length + conditional_statements_length - 1
 
-    # If... else if... else
+    # Parse if IF condition is satisfied
     if_condition = parser.parse(if_tokens, state=state).eval()
     if if_condition.value:
         parse(if_code_block, start_lineno, state)
         return lines_skipped
     
+    # Check each ELSE IF condition
     for elseif_statement, elseif_code_block in zip(elseif_tokens, elseif_code_blocks):
         elseif_condition = parser.parse(elseif_statement, state=state).eval()
+        # Parse if ELSE IF condition is satisfied
         if elseif_condition.value:
             parse(elseif_code_block, start_lineno, state)
             return lines_skipped
     
+    # Parse if ELSE condition is satisfied
     if else_code_block:  # Else statement exists if else_code_block is not empty
         parse(else_code_block, start_lineno, state)
         return lines_skipped
