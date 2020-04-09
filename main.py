@@ -149,7 +149,10 @@ def if_elseif_else(if_indent_level, input, start_lineno, state):
     if_code_block = get_indent_block(if_indent_level, input[if_pos+1:], state)
 
     next_pos = if_pos + len(if_code_block) + 1  # Next pointer for a conditional statement (either 'else if' or 'else' statement)
-    next_tokens = lexer.lex(input[next_pos])
+    try:
+        next_tokens = lexer.lex(input[next_pos])
+    except IndexError:  # End of input list, only parse 'if' statement
+        return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block)
     
     # Have to check for potentially multiple 'else if' statements
     is_elseif = next_token_type_is(copy(next_tokens), "ELSEIF")
@@ -164,7 +167,10 @@ def if_elseif_else(if_indent_level, input, start_lineno, state):
             elseif_code_blocks.append(indent_code_block)
 
             next_pos = next_pos + len(indent_code_block) + 1
-            next_tokens = lexer.lex(input[next_pos])
+            try:
+                next_tokens = lexer.lex(input[next_pos])
+            except IndexError:  # End of input list, only parse up to 'else if' statements added so far
+                return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens, elseif_code_blocks)
 
             is_elseif = next_token_type_is(copy(next_tokens), "ELSEIF")
 
@@ -177,24 +183,49 @@ def if_elseif_else(if_indent_level, input, start_lineno, state):
         else_code_block = get_indent_block(if_indent_level, input[else_pos+1:], state)
 
         next_pos = else_pos + len(else_code_block) + 1
-        next_tokens = lexer.lex(input[next_pos])
+        try:
+            next_tokens = lexer.lex(input[next_pos])
+        except IndexError:  # End of input list, parse statements without needing to check for illegal follow-up statements
+            return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens, elseif_code_blocks, else_code_block)
     
     # Check for illegal follow-up of 'else if' or 'else' after an 'else' statement
     if next_token_type_is(copy(next_tokens), "ELSEIF") or next_token_type_is(copy(next_tokens), "ELSE"):
         print(f"On line {start_lineno + next_pos}:", end=' ')
         raise AssertionError("You cannot follow 'else' with another 'else' or 'else if' statement")
     
-    # DEBUG
-    print(input[if_pos], if_code_block)
-    for i in range(len(elseif_pos)):
-        print(input[elseif_pos[i]], elseif_code_blocks[i])
-    try:
-        print(input[else_pos], else_code_block)  # there may not be an else
-    except:
-        pass
+    # # DEBUG
+    # print(input[if_pos], if_code_block)
+    # for i in range(len(elseif_pos)):
+    #     print(input[elseif_pos[i]], elseif_code_blocks[i])
+    # try:
+    #     print(input[else_pos], else_code_block)  # there may not be an else
+    # except:
+    #     pass
 
+    return parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens, elseif_code_blocks, else_code_block)
+
+
+def parse_if_elseif_else(start_lineno, state, conditional_statements_length, if_tokens, if_code_block, elseif_tokens=[], elseif_code_blocks=[], else_code_block=[]):
+    # Calculate lines needed to be skipped
     code_block_length = len(if_code_block) + sum(len(block) for block in elseif_code_blocks) + len(else_code_block)
     lines_skipped = code_block_length + conditional_statements_length - 1
+
+    # If... else if... else
+    if_condition = parser.parse(if_tokens, state=state).eval()
+    if if_condition.value:
+        parse(if_code_block, start_lineno, state)
+        return lines_skipped
+    
+    for elseif_statement, elseif_code_block in zip(elseif_tokens, elseif_code_blocks):
+        elseif_condition = parser.parse(elseif_statement, state=state).eval()
+        if elseif_condition.value:
+            parse(elseif_code_block, start_lineno, state)
+            return lines_skipped
+    
+    if else_code_block:  # Else statement exists if else_code_block is not empty
+        parse(else_code_block, start_lineno, state)
+        return lines_skipped
+
     return lines_skipped
 
 

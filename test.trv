@@ -127,18 +127,23 @@ repeat until m > 2
 // Test if, else if, else conditional statements
 output "##########################################"
 output "TESTING CONDITIONAL STATEMENTS"
-if o > 1
-	output "o greater than 1"
-	print "good"
-else if o < 1
-	output "o less than 1"
-	print "good"
-else if o <= 1  // random addition just to check if multiple ELSEIFs work
-	output "lol tf"
-	print "good"
+p = 0
+if p > 0
+	output "p is positive"
+	print "p equals " + p
+else if p < 0
+	output "p is negative"
+	print "p equals " + p
 else
-	output "o equal to 1"
-	print "good"
+	output "p is zero"
+
+if p >= 0
+	if p = 0
+		output "p is definitely zero"
+	else
+		output "p is definitely positive"
+else
+	output "p is definitely negative"
 
 output "##########################################"
 output "End of file!"
