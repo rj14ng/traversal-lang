@@ -15,6 +15,7 @@ Test code should be placed in the `test.trv` file.
 - Dynamic typing
 - Basic data types
 - Loops
+- Conditional statements
 - Rudimentary string concatenation and 'multiplication'
 
 ## Data types
@@ -35,6 +36,12 @@ Test code should be placed in the `test.trv` file.
 - Loops
   - `repeat` to loop for an integer number of items (e.g. `repeat 3`)
   - `repeat until` to loop until a condition is satisfied (e.g. `repeat until x > 10`)
+  - No colon (`:`) needed at the end of the line
+- Conditional statements
+  - `if`, `else if`, and `else`
+  - No colon (`:` needed at the end of the line)
+- Indentations using `TAB` for code blocks within loops and conditional statements
+- Nested loops and conditional statements
 - String concatenation can be done with any data type
 - String multiplication by integers (just like Python!)
 - Booleans are not integers
