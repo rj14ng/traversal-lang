@@ -35,12 +35,15 @@ class Parser():
         
         @self.pg.production("statement : IF expression")
         @self.pg.production("statement : ELSEIF expression")
-        @self.pg.production("statement : ELSE expression")
-        def statement_conditionals(state, p):
+        def statement_if_elseif(state, p):
             expr = p[1].eval()
             if type(expr) is not Condition:
                 raise AssertionError("You must follow 'if', 'else if', and/or 'else' with a condition")
             return expr
+        
+        @self.pg.production("statement : ELSE")
+        def statement_else(state, p):
+            return DoNothing()
 
         @self.pg.production("statement : REPEATUNTIL expression")
         def statement_repeat_until(state, p):
