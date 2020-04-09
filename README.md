@@ -4,7 +4,7 @@
 Repository for Rocco Jiang's Extended Project Qualification. Traversal is a simple text-based programming language specifically aimed at teaching young students basic programming concepts, with an intention to bridge the gap between visual block-based languages (e.g. Scratch) and text-based languages (e.g. Python).
 
 ## Requirements
-The parser requires RPly.
+The parser requires [RPly](https://github.com/alex/rply).
 
 Install using `pip3 install rply`.
 
@@ -51,7 +51,7 @@ A file can be provided and run using:
   - No colon (`:`) needed at the end of the line
 - Conditional statements
   - `if`, `else if`, and `else`
-  - No colon (`:` needed at the end of the line)
+  - No colon (`:`) needed at the end of the line
 - Indentations using `TAB` for code blocks within loops and conditional statements
 - Nested loops and conditional statements
 - String concatenation can be done with any data type without need for casting
