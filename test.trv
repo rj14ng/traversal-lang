@@ -2,12 +2,21 @@ output "##########################################"
 output "TESTING MATHEMATICAL PRECEDENCE"
 print 17 + 3 * 8 / 6  // 21.0
 print 38 / 9 * 27 + 3  // 117.0
+print 174 mod 28 + 3 * 9  // 33
 
 // Test floats AKA decimals
 output "##########################################"
 output "TESTING DECIMALS"
 print 3.142 * 2  // 6.284
 print 2.718 / 2  // 1.359
+print 6.85 mod 0.37  // 0.18999999999999972
+
+// Test exponentiation
+output "##########################################"
+output "TESTING EXPONENTS/POWERS"
+print 2 ^ 31 - 1  // 2147483647
+print 2 ^ 0.5  // 1.4142135623730951
+print 3 ^ (-1/3)  // 0.6933612743506348
 
 // Test parentheses
 output "##########################################"

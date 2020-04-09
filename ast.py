@@ -79,6 +79,20 @@ class Integer():
         if type(right) is Integer or type(right) is Decimal:  # Always perform true divison
             return Decimal(self.value / right.value)
         raise ValueError(f"You cannot divide {type(right).__name__.lower()} from an integer!")
+    
+    def pow(self, right):
+        if type(right) is Integer:
+            return Integer(self.value ** right.value)
+        elif type(right) is Decimal:
+            return Decimal(self.value ** right.value)
+        raise ValueError(f"You cannot use exponentiation on {type(right).__name__.lower()} with an integer!")
+
+    def mod(self, right):
+        if type(right) is Integer:
+            return Integer(self.value % right.value)
+        elif type(right) is Decimal:
+            return Decimal(self.value % right.value)
+        raise ValueError(f"You cannot use modulo on {type(right).__name__.lower()} with an integer!")
 
 
 # Floats
@@ -147,6 +161,16 @@ class Decimal():
         if type(right) is Integer or type(right) is Decimal:  # Always perform true divison
             return Decimal(self.value / right.value)
         raise ValueError(f"You cannot divide {type(right).__name__.lower()} from a decimal number!")
+    
+    def pow(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Decimal(self.value ** right.value)
+        raise ValueError(f"You cannot use exponentiation on {type(right).__name__.lower()} with a decimal number!")
+    
+    def mod(self, right):
+        if type(right) is Integer or type(right) is Decimal:
+            return Decimal(self.value % right.value)
+        raise ValueError(f"You cannot use modulo on {type(right).__name__.lower()} with a decimal number!")
 
 
 # Strings
@@ -205,6 +229,12 @@ class Text():
     
     def div(self, right):
         raise ValueError("You cannot divide text!")
+    
+    def pow(self, right):
+        raise ValueError("You cannot use exponentiation on text!")
+
+    def mod(self, right):
+        raise ValueError(f"You cannot use modulo on text!")
 
 
 # Booleans
@@ -259,6 +289,12 @@ class Condition():
     
     def div(self, right):
         raise ValueError("You cannot divide anything from a condition!")
+
+    def pow(self, right):
+        raise ValueError("You cannot use exponentiation on a condition!")
+    
+    def mod(self, right):
+        raise ValueError(f"You cannot use modulo on a condition!")
 
 
 # Binary operators
@@ -329,6 +365,16 @@ class Mul(BinaryOp):
 class Div(BinaryOp):
     def eval(self):
         return self.left.eval().div(self.right.eval())
+
+
+class Pow(BinaryOp):
+    def eval(self):
+        return self.left.eval().pow(self.right.eval())
+
+
+class Mod(BinaryOp):
+    def eval(self):
+        return self.left.eval().mod(self.right.eval())
 
 
 # Unary operators

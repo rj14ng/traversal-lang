@@ -7,7 +7,7 @@ class Parser():
             # A list of all token names accepted by the parser
             # INDENT not added as it's not actually used within RPLY's native parser functions
             ['TEXT', 'DECIMAL', 'INTEGER', 'OUTPUT', 'CONDITION', 'REPEATUNTIL', 'REPEAT', 'IF', 'ELSEIF', 'ELSE', 'VARIABLE',
-             'ADD', 'SUB', 'MUL', 'DIV', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
+             'ADD', 'SUB', 'MUL', 'DIV', 'POW', 'MOD', '=', 'NOT=', '<=', '<', '>=', '>', 'AND', 'OR', 'NOT',
              'LPAREN', 'RPAREN', 'NEWLINE', '$end'],
             # A list of precedence rules with ascending precedence, to disambiguate ambiguous production rules
             precedence = [
@@ -15,7 +15,8 @@ class Parser():
                 ('left', ['NOT']),
                 ('left', ['=', 'NOT=', '<=', '<', '>=', '>']),
                 ('left', ['ADD', 'SUB']),
-                ('left', ['MUL', 'DIV']),
+                ('left', ['MUL', 'DIV', 'MOD']),
+                ('left', ['POW'])
             ]
         )
     
@@ -78,6 +79,8 @@ class Parser():
         @self.pg.production("expression : expression SUB expression")
         @self.pg.production("expression : expression MUL expression")
         @self.pg.production("expression : expression DIV expression")
+        @self.pg.production("expression : expression POW expression")
+        @self.pg.production("expression : expression MOD expression")
         def expression_binop(state, p):
             left = p[0]
             right = p[2]
@@ -90,6 +93,10 @@ class Parser():
                 return Mul(left, right)
             elif operator.gettokentype() == 'DIV':
                 return Div(left, right)
+            elif operator.gettokentype() == 'POW':
+                return Pow(left, right)
+            elif operator.gettokentype() == 'MOD':
+                return Mod(left, right)
             else:
                 raise AssertionError("This should not be possible!")
         

@@ -22,6 +22,8 @@ class Lexer():
         self.lexer.add('SUB', r'-')
         self.lexer.add('MUL', r'\*')
         self.lexer.add('DIV', r'/')
+        self.lexer.add('POW', r'\^')
+        self.lexer.add('MOD', r'mod(?!\w)')
         # Equals acts as assignment (=) and equality (==) operator
         self.lexer.add('=', r'=')
         # Not equals acts as != operator
