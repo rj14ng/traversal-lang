@@ -13,6 +13,7 @@ Test code should be placed in the `test.trv` file.
 
 ## Features
 - Dynamic typing
+- Somewhat weak typing (implicit conversions made where they make logical sense, e.g. string concatenation)
 - Basic data types
 - Loops
 - Conditional statements
@@ -26,10 +27,15 @@ Test code should be placed in the `test.trv` file.
 
 ## Grammar
 - Comments indicated by `//`
-- Typical arithmetic operators `+`, `-`, `*`, `/` (only true division)
+- Arithmetic operators
+  - Addition (`+`)
+  - Subtraction (`-`)
+  - Multiplication (`*`)
+  - True division (`/`)
+  - Exponentiation/powers (`^`)
+  - Modulo (`mod`)
 - Print to stdout using `output` or `print`
 - Assignment operator using `=`
-- Loops indicated by `repeat` followed by the integer number of times to repeat (e.g. `repeat 3` loops over 3 times)
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
 - Logical operators are `and`, `or`, `not`
@@ -42,6 +48,6 @@ Test code should be placed in the `test.trv` file.
   - No colon (`:` needed at the end of the line)
 - Indentations using `TAB` for code blocks within loops and conditional statements
 - Nested loops and conditional statements
-- String concatenation can be done with any data type
+- String concatenation can be done with any data type without need for casting
 - String multiplication by integers (just like Python!)
 - Booleans are not integers
