@@ -423,7 +423,7 @@ if __name__ == "__main__":
 
     # Check start time
     start_time = time.time()
-    
+
     # Open and parse test.trv file by default
     if len(sys.argv) == (1 if sys.argv[1] != "-t" else 2):
         with open("test.trv", "r") as test_input:
