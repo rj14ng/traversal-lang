@@ -1,0 +1,40 @@
+// Project Euler Problem 1 - Multiples of 3 and 5
+// If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+// Find the sum of all the multiples of 3 or 5 below 1000.
+
+
+// Method 1 (5 secs)
+i = 1
+sum_1 = 0
+
+repeat until i >= 1000
+	if i mod 3 = 0 or i mod 5 = 0
+		sum_1 = sum_1 + i
+	i = i + 1
+
+output sum_1
+
+
+// Method 2 (1.5 secs)
+sum_2 = 0
+
+multiples_of_3 = 3
+sum_of_multiples_of_3 = 0
+repeat until multiples_of_3 >= 1000
+	sum_of_multiples_of_3 = sum_of_multiples_of_3 + multiples_of_3
+	multiples_of_3 = multiples_of_3 + 3
+
+multiples_of_5 = 5
+sum_of_multiples_of_5 = 0
+repeat until multiples_of_5 >= 1000
+	sum_of_multiples_of_5 = sum_of_multiples_of_5 + multiples_of_5
+	multiples_of_5 = multiples_of_5 + 5
+
+multiples_of_15 = 15
+sum_of_multiples_of_15 = 0
+repeat until multiples_of_15 >= 1000
+	sum_of_multiples_of_15 = sum_of_multiples_of_15 + multiples_of_15
+	multiples_of_15 = multiples_of_15 + 15
+
+sum_2 = sum_of_multiples_of_3 + sum_of_multiples_of_5 - sum_of_multiples_of_15
+output sum_2
