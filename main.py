@@ -4,6 +4,7 @@ from parser import Parser
 import logging
 import sys
 from copy import copy
+import time
 
 # Parse functions
 def next_token_type_is(tokens, type):
@@ -420,16 +421,24 @@ if __name__ == "__main__":
     pg.parse()
     parser = pg.get_parser()
 
+    # Check start time
+    start_time = time.time()
+    
     # Open and parse test.trv file by default
-    if len(sys.argv) == 1:
+    if len(sys.argv) == (1 if sys.argv[1] != "-t" else 2):
         with open("test.trv", "r") as test_input:
             state = ParserState()
             parse(test_input.readlines(), 1, state)
     # Open and parse user-defined file
-    elif len(sys.argv) == 2:
-        trv_file = sys.argv[1]
+    elif len(sys.argv) == (2 if sys.argv[1] != "-t" else 3):
+        trv_file = sys.argv[1 if sys.argv[1] != "-t" else 2]
         with open(trv_file, "r") as user_input:
             state = ParserState()
             parse(user_input.readlines(), 1, state)
     else:
         raise OSError("Too many command-line arguments!")
+
+    if sys.argv[1] == "-t":
+        # Check end time and calculate time elapsed
+        end_time = time.time()
+        print(f"TIME ELAPSED: {end_time - start_time}")

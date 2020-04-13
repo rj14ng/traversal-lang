@@ -18,6 +18,10 @@ A file can be provided and run using:
 
 `python3 main.py filename.trv`
 
+Traversal programs can also be timed, by adding a `-t` flag:
+
+`python3 -t main.py filename.trv`
+
 ## Features
 - Dynamic typing
 - Somewhat weak typing (implicit conversions made where they make logical sense, e.g. string concatenation)
