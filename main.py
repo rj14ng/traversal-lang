@@ -408,7 +408,7 @@ def parse(input, start_lineno, state):
 
 if __name__ == "__main__":
     # Remove Python traceback to hide 'scary' error messages
-    sys.tracebacklimit = 0
+    # sys.tracebacklimit = 0
 
     # Parser state
     state = ParserState()
@@ -424,21 +424,28 @@ if __name__ == "__main__":
     # Check start time
     start_time = time.time()
 
+    # Check if there is a -t flag
+    timed = True
+    try:
+        timed = sys.argv[1] == "-t"
+    except:
+        timed = False
+
     # Open and parse test.trv file by default
-    if len(sys.argv) == (1 if sys.argv[1] != "-t" else 2):
+    if len(sys.argv) == (1 if not timed else 2):
         with open("test.trv", "r") as test_input:
             state = ParserState()
             parse(test_input.readlines(), 1, state)
     # Open and parse user-defined file
-    elif len(sys.argv) == (2 if sys.argv[1] != "-t" else 3):
-        trv_file = sys.argv[1 if sys.argv[1] != "-t" else 2]
+    elif len(sys.argv) == (2 if not timed else 3):
+        trv_file = sys.argv[1 if not timed else 2]
         with open(trv_file, "r") as user_input:
             state = ParserState()
             parse(user_input.readlines(), 1, state)
     else:
         raise OSError("Too many command-line arguments!")
 
-    if sys.argv[1] == "-t":
+    if timed:
         # Check end time and calculate time elapsed
         end_time = time.time()
         print(f"TIME ELAPSED: {end_time - start_time}")
