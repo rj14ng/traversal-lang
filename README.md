@@ -54,8 +54,10 @@ Traversal programs can also be timed, by adding a `-t` flag:
   - `repeat` to loop for an integer number of items (e.g. `repeat 3`)
   - `repeat until` to loop until a condition is satisfied (e.g. `repeat until x > 10`)
   - No colon (`:`) needed at the end of the line
-- Conditional statements
-  - `if`, `else if`, and `else`
+- Conditional statements (including synonyms for the typical `if`, `else if`, `else` syntax)
+  - `if`
+  - `else if` / `buf if` / `otherwise if`
+  - `else` / `otherwise`
   - No colon (`:`) needed at the end of the line
 - Indentations using `TAB` for code blocks within loops and conditional statements
 - Nested loops and conditional statements
