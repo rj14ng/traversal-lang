@@ -140,10 +140,10 @@ p = 0
 if p > 0
 	output "p is positive"
 	print "p equals " + p
-else if p < 0
+but if p < 0  // Test synonym for else if
 	output "p is negative"
 	print "p equals " + p
-else
+otherwise  // Test synonym for else
 	output "p is zero"
 
 if p >= 0
