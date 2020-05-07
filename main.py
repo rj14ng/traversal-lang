@@ -408,7 +408,7 @@ def parse(input, start_lineno, state):
 
 if __name__ == "__main__":
     # Remove Python traceback to hide 'scary' error messages
-    # sys.tracebacklimit = 0
+    sys.tracebacklimit = 0
 
     # Parser state
     state = ParserState()
