@@ -1,0 +1,25 @@
+// Find if a year is a leap year or not
+
+year = 2020
+
+// Method 1
+if year mod 400 = 0
+	output year + " is a leap year"
+else if year mod 100 = 0
+	output year + " is not a leap year"
+else if year mod 4 = 0
+	output year + " is a leap year"
+else
+	output year + " is not a leap year"
+
+// Method 2
+if year mod 4 = 0
+	if year mod 100 = 0
+		if year mod 400 = 0
+			output year + " is a leap year"
+		else
+			output year + " is not a leap year"
+	else
+		output year + " is a leap year"
+else
+	output year + " is not a leap year"
