@@ -12,15 +12,15 @@ Install using `pip3 install rply`.
 ## Guide
 Traversal comes with a `test.trv` file by default, which is run if no other files are provided:
 
-`python3 main.py`
+`python3 run.py`
 
 A file can be provided and run using:
 
-`python3 main.py filename.trv`
+`python3 run.py filename.trv`
 
 Traversal programs can also be timed, by adding a `-t` flag:
 
-`python3 -t main.py filename.trv`
+`python3 -t run.py filename.trv`
 
 ## Features
 - Dynamic typing
