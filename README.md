@@ -56,7 +56,7 @@ Traversal programs can also be timed, by adding a `-t` flag:
   - No colon (`:`) needed at the end of the line
 - Conditional statements (including synonyms for the typical `if`, `else if`, `else` syntax)
   - `if`
-  - `else if` / `buf if` / `otherwise if`
+  - `else if` / `but if` / `otherwise if`
   - `else` / `otherwise`
   - No colon (`:`) needed at the end of the line
 - Indentations using `TAB` for code blocks within loops and conditional statements
