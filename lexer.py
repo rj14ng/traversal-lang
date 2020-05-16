@@ -17,7 +17,7 @@ class Lexer:
         self.lexer.add("DECIMAL", r"\d+\.\d+")
         self.lexer.add("INTEGER", r"\d+")
         # Output/print
-        self.lexer.add("OUTPUT", r"output(?!\w)|print(?!\w)")
+        self.lexer.add("OUTPUT", r"output(?!\w)|print(?!\w)|say(?!\w)")
         # Boolean AKA condition
         self.lexer.add("CONDITION", r"(?i)true(?!\w)|false(?!\w)")  # Case insensitive
         # Comments

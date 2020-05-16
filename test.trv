@@ -7,9 +7,9 @@ print 174 mod 28 + 3 * 9  // 33
 // Test floats AKA decimals
 output "##########################################"
 output "TESTING DECIMALS"
-print 3.142 * 2  // 6.284
-print 2.718 / 2  // 1.359
-print 6.85 mod 0.37  // 0.18999999999999972
+say 3.142 * 2  // 6.284
+say 2.718 / 2  // 1.359
+say 6.85 mod 0.37  // 0.18999999999999972
 
 // Test exponentiation
 output "##########################################"

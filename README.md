@@ -45,7 +45,7 @@ Traversal programs can also be timed, by adding a `-t` flag:
   - True division (`/`)
   - Exponentiation/powers (`^`)
   - Modulo (`mod`)
-- Print to stdout using `output` or `print`
+- Print to stdout using `output`, `print`, or `say`
 - Assignment operator using `=`
 - Conditional values are case insensitive (`True`, `TRUE`, `false`, `fALsE` are all acceptable)
 - Comparison operators are `=`, `not=`, `<`, `<=`, `>`, `>=`
